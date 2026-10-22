@@ -18,12 +18,14 @@ interface SchedulePageProps {
   onNavigateTeacher?: (teacherName: string) => void;
   onNavigateSubject?: (subjectId: string) => void;
   onOpenSync?: () => void;
+  isSyncing?: boolean;
 }
 
 export const SchedulePage: React.FC<SchedulePageProps> = ({
   onNavigateTeacher,
   onNavigateSubject,
-  onOpenSync
+  onOpenSync,
+  isSyncing = false
 }) => {
   const timeInfo = getUfaTimeInfo();
   const [viewMode, setViewMode] = useState<'day' | 'week'>('day');
@@ -66,11 +68,16 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({
           {onOpenSync && (
             <button
               onClick={onOpenSync}
-              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95"
-              title="Запустить скрипт синхронизации с ИСУ УУНиТ"
+              disabled={isSyncing}
+              className={`inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition-all ${
+                isSyncing
+                  ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 cursor-wait'
+                  : 'bg-amber-400 hover:bg-amber-300 text-slate-950 hover:scale-105 active:scale-95'
+              }`}
+              title="Запустить синхронизацию расписания с ИСУ УУНиТ в один клик"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Запросить обновление</span>
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span>{isSyncing ? 'Синхронизация в фоне...' : 'Обновить расписание'}</span>
             </button>
           )}
 

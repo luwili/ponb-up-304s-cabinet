@@ -23,9 +23,10 @@ import { getUfaTimeInfo } from '../utils/time';
 interface HomePageProps {
   onNavigate: (tab: string, itemId?: string) => void;
   onOpenSync?: () => void;
+  isSyncing?: boolean;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync }) => {
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSyncing = false }) => {
   const timeInfo = getUfaTimeInfo();
 
   // Find schedule for today (or Monday if Sunday)
@@ -113,8 +114,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync }) =>
                 {onOpenSync && (
                   <button
                     onClick={onOpenSync}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors"
-                    title="Запросить синхронизацию расписания с ИСУ УУНиТ"
+                    disabled={isSyncing}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      isSyncing
+                        ? 'text-amber-500 animate-spin cursor-wait'
+                        : 'text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+                    }`}
+                    title="Запустить синхронизацию расписания с ИСУ УУНиТ"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
                   </button>

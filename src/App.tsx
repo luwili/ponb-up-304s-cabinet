@@ -3,7 +3,8 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { SearchModal } from './components/SearchModal';
-import { SyncScheduleModal } from './components/SyncScheduleModal';
+import { SyncToast } from './components/SyncToast';
+import { triggerOneClickSync, SyncStatus } from './utils/scheduleSync';
 
 import { HomePage } from './pages/HomePage';
 import { SchedulePage } from './pages/SchedulePage';
@@ -49,7 +50,21 @@ export function App() {
   // Modals & Drawers
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [syncModalOpen, setSyncModalOpen] = useState(false);
+
+  // 1-Click Sync Status
+  const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+
+  const handleStartOneClickSync = () => {
+    if (isSyncing) return;
+    setIsSyncing(true);
+    triggerOneClickSync((status) => {
+      setSyncStatus(status);
+      if (status.state === 'error' || status.state === 'idle') {
+        setIsSyncing(false);
+      }
+    });
+  };
 
   // User Local State
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -194,7 +209,8 @@ export function App() {
           {currentTab === 'home' && (
             <HomePage 
               onNavigate={handleSelectTab} 
-              onOpenSync={() => setSyncModalOpen(true)}
+              onOpenSync={handleStartOneClickSync}
+              isSyncing={isSyncing}
             />
           )}
 
@@ -202,7 +218,8 @@ export function App() {
             <SchedulePage
               onNavigateTeacher={handleNavigateTeacher}
               onNavigateSubject={handleNavigateSubject}
-              onOpenSync={() => setSyncModalOpen(true)}
+              onOpenSync={handleStartOneClickSync}
+              isSyncing={isSyncing}
             />
           )}
 
@@ -299,10 +316,14 @@ export function App() {
         onNavigate={handleGlobalNavigate}
       />
 
-      {/* Sync Schedule Modal */}
-      <SyncScheduleModal
-        isOpen={syncModalOpen}
-        onClose={() => setSyncModalOpen(false)}
+      {/* Sync Notification Toast */}
+      <SyncToast
+        status={syncStatus}
+        onDismiss={() => {
+          setSyncStatus(null);
+          setIsSyncing(false);
+        }}
+        onReloadNow={() => window.location.reload()}
       />
     </div>
   );
