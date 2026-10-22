@@ -12,13 +12,9 @@ import {
   BookOpen,
   Scale,
   Calendar,
-  Award,
-  Clock,
   Layers,
   FileCheck2,
-  CheckCircle2,
-  AlertCircle,
-  ChevronDown,
+  Clock,
   ArrowRight
 } from 'lucide-react';
 import examQuestionsData from '../data/exam-questions.json';
@@ -120,13 +116,13 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
           <div>
             <div className="flex items-center space-x-2 text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider mb-1">
               <Calendar className="w-3.5 h-3.5" />
-              <span>Зимняя сессия 2026/2027 · Официальные данные ИСУ УУНиТ</span>
+              <span>Зимняя сессия 2026/2027 · Официальный учебный план</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Экзамены, зачёты и аттестация
+              Экзамены, зачёты и подготовка
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">
-              Учебный план группы {sessionData.group}, электронная зачётная книжка № {sessionData.studyBook} и билеты для самопроверки.
+              Учебный план группы {sessionData.group}, формы итогового контроля и банк билетов для самопроверки.
             </p>
           </div>
 
@@ -189,10 +185,10 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
             </span>
           </div>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
-            <span className="text-[11px] text-slate-400 block mb-0.5">Средний балл зачётки</span>
-            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
-              <Award className="w-4 h-4" />
-              <span>{sessionData.averageGrade} из 5.0</span>
+            <span className="text-[11px] text-slate-400 block mb-0.5">Всего дисциплин</span>
+            <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center space-x-1">
+              <Layers className="w-4 h-4" />
+              <span>{session.totalDisciplines} предметов</span>
             </span>
           </div>
         </div>
@@ -236,7 +232,7 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
                 </h2>
               </div>
               <span className="hidden sm:inline text-xs text-slate-400 font-mono">
-                Официальный учебный план ИСУ
+                Группа {sessionData.group}
               </span>
             </div>
 
@@ -280,9 +276,8 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
                   </div>
 
                   <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <span className="inline-flex items-center space-x-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>{exam.status}</span>
+                    <span className="text-xs text-slate-400">
+                      Итоговый экзамен 5 семестра
                     </span>
 
                     <button
@@ -334,22 +329,17 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
                         <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
                           <span>Преподаватель: {cr.teacher}</span>
                           <span>•</span>
+                          <span>Кафедра: {cr.department}</span>
+                          <span>•</span>
                           <span>Лек: {cr.hours.lectures}ч, Прак: {cr.hours.practice}ч, СРС: {cr.hours.self}ч</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-2 self-start sm:self-center pl-9 sm:pl-0">
-                      {cr.passed ? (
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center space-x-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>{cr.status}</span>
-                        </span>
-                      ) : (
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                          {cr.status}
-                        </span>
-                      )}
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-800/60">
+                        {cr.controlType}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -357,19 +347,19 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
             </div>
           </div>
 
-          {/* Section: Full Gradebook History (Semesters 1-10) */}
+          {/* Section: Full Curriculum History (Semesters 1-10) */}
           <div className="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <div className="text-xs font-bold text-brand-700 dark:text-brand-400 uppercase tracking-wider">
-                  Электронная зачётная книжка
+                  Учебный план специальности
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-                  История аттестации и учебный план (Семестры 1–10)
+                  Дисциплины и формы контроля (Семестры 1–10)
                 </h3>
               </div>
               <span className="text-xs text-slate-400 font-mono">
-                Зачётка № {sessionData.studyBook}
+                Группа {sessionData.group} · {sessionData.specialty}
               </span>
             </div>
 
@@ -377,7 +367,7 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
               {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].map((sNum) => {
                 const isCurrent = sNum === '5';
                 const isSelected = expandedSemester === sNum;
-                const isPast = parseInt(sNum) < 5;
+                const courseNum = Math.ceil(parseInt(sNum) / 2);
                 return (
                   <button
                     key={sNum}
@@ -387,13 +377,11 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
                         ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/40 text-brand-900 dark:text-white ring-2 ring-brand-500/20'
                         : isCurrent
                         ? 'border-rose-300 dark:border-rose-900 bg-rose-50/50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-200'
-                        : isPast
-                        ? 'border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/30 dark:bg-emerald-950/10 text-slate-700 dark:text-slate-300'
-                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500'
+                        : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-slate-300'
                     }`}
                   >
                     <div className="text-[10px] font-bold uppercase tracking-wider opacity-70">
-                      {isCurrent ? 'Текущий' : isPast ? 'Сдан' : 'План'}
+                      {isCurrent ? 'Текущий семестр' : `${courseNum} курс`}
                     </div>
                     <div className="text-sm font-extrabold mt-0.5">
                       {sNum} семестр
@@ -423,17 +411,19 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
                         {disc.title}
                         <span className="text-slate-400 ml-2 font-mono">({disc.credits} з.е.)</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        {disc.controls.map((ctrl, cIdx) => (
+                      <div className="flex items-center space-x-1.5">
+                        {disc.controls.map((ctrlType, cIdx) => (
                           <span
                             key={cIdx}
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              ctrl.passed
-                                ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
-                                : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                            className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold ${
+                              ctrlType.includes('Экзамен')
+                                ? 'bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900/40'
+                                : ctrlType.includes('Курсов')
+                                ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/40'
+                                : 'bg-sky-100 dark:bg-sky-950/70 text-sky-800 dark:text-sky-300 border border-sky-200 dark:border-sky-900/40'
                             }`}
                           >
-                            {ctrl.type} {ctrl.mark ? `(${ctrl.mark})` : ''}
+                            {ctrlType}
                           </span>
                         ))}
                       </div>

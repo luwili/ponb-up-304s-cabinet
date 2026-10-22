@@ -350,10 +350,6 @@ def fetch_session_data_isu(opener):
                 for k, v in points.items():
                     if isinstance(v, dict) and v.get('plan'):
                         ctrl_type = TYPE_NAMES.get(str(k), 'Аттестация')
-                        best_mark = v.get('best_mark')
-                        mark_str = best_mark.get('point_title') if best_mark else None
-                        is_passed = bool(mark_str and 'не' not in mark_str.lower())
-                        status = f'Сдано ({mark_str})' if mark_str else 'Предстоит сдача'
 
                         entry = {
                             'id': f'sem5-{disc.get("discipline_id", len(exams)+len(credits_list)+1)}-{k}',
@@ -370,17 +366,14 @@ def fetch_session_data_isu(opener):
                                 'total': total_hours
                             },
                             'teacher': teacher,
-                            'department': department,
-                            'status': status,
-                            'passed': is_passed,
-                            'mark': mark_str
+                            'department': department
                         }
                         if ctrl_type == 'Экзамен':
                             exams.append(entry)
                         else:
                             credits_list.append(entry)
 
-        # All semesters overview
+        # All semesters overview (общий учебный план группы)
         all_sems = {}
         for s_num in sorted([k for k in res.get('plan', {}).keys() if str(k).isdigit()], key=int):
             s_data = res['plan'][s_num]
@@ -398,13 +391,7 @@ def fetch_session_data_isu(opener):
                     for pk, pv in pts.items():
                         if isinstance(pv, dict) and pv.get('plan'):
                             c_name = TYPE_NAMES.get(str(pk), f'Тип {pk}')
-                            bm = pv.get('best_mark')
-                            bm_title = bm.get('point_title') if bm else None
-                            ctrl_list.append({
-                                'type': c_name,
-                                'mark': bm_title,
-                                'passed': bool(bm_title and 'не' not in bm_title.lower())
-                            })
+                            ctrl_list.append(c_name)
                 disc_list.append({
                     'title': d_title,
                     'credits': d.get('credits', 0),
@@ -416,11 +403,9 @@ def fetch_session_data_isu(opener):
             'group': 'ПОНБ-УП-304С',
             'specialty': '40.05.01 Правовое обеспечение национальной безопасности',
             'specialization': 'Уголовно-правовая',
-            'studyBook': active_book.get('study_book', '25120615'),
             'currentSemester': 5,
             'course': 3,
             'academicYear': '2026/2027',
-            'averageGrade': res.get('average_point', 4.09),
             'lastSyncedAt': datetime.now(UFA_TZ).strftime('%Y-%m-%d %H:%M:%S UTC+5'),
             'currentSession': {
                 'title': 'Зимняя экзаменационная сессия 2026/2027 (5 семестр, 3 курс)',

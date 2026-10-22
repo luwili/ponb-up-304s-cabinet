@@ -2,12 +2,10 @@
   "group": "ПОНБ-УП-304С",
   "specialty": "40.05.01 Правовое обеспечение национальной безопасности",
   "specialization": "Уголовно-правовая",
-  "studyBook": "25120615",
   "currentSemester": 5,
   "course": 3,
   "academicYear": "2026/2027",
-  "averageGrade": "4.09",
-  "lastSyncedAt": "2026-10-22 18:35:15 UTC+5",
+  "lastSyncedAt": "2026-10-22 18:43:30 UTC+5",
   "currentSession": {
     "title": "Зимняя экзаменационная сессия 2026/2027 (5 семестр, 3 курс)",
     "examsCount": 4,
@@ -29,10 +27,7 @@
           "total": 142.8
         },
         "teacher": "Крылов Олег Михайлович (лекции) / Карамов Ильгиз Флоритович (практика)",
-        "department": "Кафедра финансового и административного права",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра финансового и административного права"
       },
       {
         "id": "sem5-1937-3",
@@ -49,10 +44,7 @@
           "total": 142.8
         },
         "teacher": "Малкова Камилла Эдуардовна",
-        "department": "Кафедра экологического и трудового права",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра экологического и трудового права"
       },
       {
         "id": "sem5-31064-3",
@@ -69,10 +61,7 @@
           "total": 142.8
         },
         "teacher": "Муратова Альмира Раисовна",
-        "department": "Кафедра гражданского права",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра гражданского права"
       },
       {
         "id": "sem5-31062-3",
@@ -89,10 +78,7 @@
           "total": 142.8
         },
         "teacher": "Мусабиров Эмиль Ильдарович",
-        "department": "Кафедра уголовного права и процесса",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра уголовного права и процесса"
       }
     ],
     "credits": [
@@ -111,10 +97,7 @@
           "total": 107.8
         },
         "teacher": "Нагаев Тимур Ирекович",
-        "department": "Кафедра финансового и административного права",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра финансового и административного права"
       },
       {
         "id": "sem5-23236-2",
@@ -131,10 +114,7 @@
           "total": 71.8
         },
         "teacher": "Вяткин Андрей Николаевич",
-        "department": "Кафедра криминалистики",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра криминалистики"
       },
       {
         "id": "sem5-31026-2",
@@ -151,10 +131,7 @@
           "total": 107.8
         },
         "teacher": "Нурмухаметов Руслан Наилевич (Куратор)",
-        "department": "Кафедра уголовного права и процесса",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра уголовного права и процесса"
       },
       {
         "id": "sem5-31027-2",
@@ -171,10 +148,7 @@
           "total": 107.8
         },
         "teacher": "Метелёва Снежана Владимировна",
-        "department": "Кафедра гражданского процесса",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра гражданского процесса"
       },
       {
         "id": "sem5-30978-2",
@@ -191,10 +165,7 @@
           "total": 71.8
         },
         "teacher": "Преподаватель кафедры",
-        "department": "Институт права УУНиТ",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Институт права УУНиТ"
       },
       {
         "id": "sem5-2840-2",
@@ -211,10 +182,7 @@
           "total": 35.8
         },
         "teacher": "Фаткуллина Элина Раисовна",
-        "department": "Кафедра финансового и административного права",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Кафедра финансового и административного права"
       },
       {
         "id": "sem5-25443-2",
@@ -231,10 +199,7 @@
           "total": 52
         },
         "teacher": "Матвеев Станислав Станиславович",
-        "department": "Кафедра физического воспитания",
-        "status": "Сдано (Зачтено)",
-        "passed": true,
-        "mark": "Зачтено"
+        "department": "Кафедра физического воспитания"
       },
       {
         "id": "sem5-56304-2",
@@ -251,10 +216,7 @@
           "total": 52
         },
         "teacher": "Преподаватель кафедры",
-        "department": "Институт права УУНиТ",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Институт права УУНиТ"
       },
       {
         "id": "sem5-31025-2",
@@ -271,10 +233,7 @@
           "total": 107.8
         },
         "teacher": "Преподаватель кафедры",
-        "department": "Институт права УУНиТ",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Институт права УУНиТ"
       },
       {
         "id": "sem5-33813-2",
@@ -291,10 +250,7 @@
           "total": 35.8
         },
         "teacher": "Преподаватель кафедры",
-        "department": "Институт права УУНиТ",
-        "status": "Предстоит сдача",
-        "passed": false,
-        "mark": null
+        "department": "Институт права УУНиТ"
       }
     ]
   },
@@ -304,99 +260,63 @@
         "title": "История России",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "История государства и права России",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Иностранный язык",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Римское право",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Удовлетворительно",
-            "passed": true
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Русский язык и деловая коммуникация",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Правоохранительные органы",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Информационные технологии в юридической деятельности",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Теория государства и права",
         "credits": 4,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Конституционное право России",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
@@ -408,33 +328,21 @@
         "title": "Основы российской государственности",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Общая физическая подготовка",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Спортивные секции",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -443,115 +351,71 @@
         "title": "История России",
         "credits": 2,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Теория государства и права",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Хорошо",
-            "passed": true
-          },
-          {
-            "type": "Курсовая работа",
-            "mark": "Хорошо",
-            "passed": true
-          }
+          "Экзамен",
+          "Курсовая работа"
         ]
       },
       {
         "title": "Конституционное право России",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "История государства и права зарубежных стран",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Логика",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Физическая культура и спорт",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Безопасность жизнедеятельности",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Иностранный язык в сфере юриспруденции",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Гражданское право (часть 1)",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Уголовное право (общая часть)",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
@@ -568,22 +432,14 @@
         "title": "Практика по получению первичных профессиональных умений и навыков",
         "credits": 3,
         "controls": [
-          {
-            "type": "Диф. зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Диф. зачёт"
         ]
       },
       {
         "title": "Самоорганизация и саморазвитие в высшей школе",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -592,137 +448,85 @@
         "title": "Иностранный язык в сфере юриспруденции",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Отлично",
-            "passed": true
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Муниципальное право",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Философия",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Хорошо",
-            "passed": true
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Правовые основы государственной службы",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Основы теории национальной безопасности",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Административное право",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Трудовое право",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Гражданское право (часть 1)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Удовлетворительно",
-            "passed": true
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Уголовное право (общая часть)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Хорошо",
-            "passed": true
-          },
-          {
-            "type": "Курсовая работа",
-            "mark": "Хорошо",
-            "passed": true
-          }
+          "Экзамен",
+          "Курсовая работа"
         ]
       },
       {
         "title": "Общая физическая подготовка",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Спортивные секции",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Самоорганизация и саморазвитие в высшей школе",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -731,132 +535,84 @@
         "title": "Административное право",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Хорошо",
-            "passed": true
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Трудовое право",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": "Отлично",
-            "passed": true
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "История политических и правовых учений",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Проектная деятельность и управление проектами в области права",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Введение в legal tech",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Финансовое право",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Гражданское право (часть 2)",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Уголовное право (особенная часть)",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Общая физическая подготовка",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Спортивные секции",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Ознакомительная практика",
         "credits": 3,
         "controls": [
-          {
-            "type": "Диф. зачёт",
-            "mark": "Отлично",
-            "passed": true
-          }
+          "Диф. зачёт"
         ]
       },
       {
         "title": "Самоорганизация и саморазвитие в высшей школе",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -865,99 +621,63 @@
         "title": "Финансовое право",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Административный судебный процесс",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Специальная профессиональная подготовка",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Уголовно-процессуальное право (уголовный процесс)",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Гражданское процессуальное право (гражданский процесс)",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Экологическое право",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Международное право",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Гражданское право (часть 2)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Уголовное право (особенная часть)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
@@ -969,55 +689,35 @@
         "title": "Основы финансовой грамотности",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Общая физическая подготовка",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Спортивные секции",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Судебная медицина и психиатрия",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Самоорганизация и саморазвитие в высшей школе",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -1026,159 +726,99 @@
         "title": "Юридическая техника",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Право социального обеспечения",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Специальная профессиональная подготовка",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Уголовно-процессуальное право (уголовный процесс)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Гражданское процессуальное право (гражданский процесс)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Культура и межкультурные взаимодействия в современном мире",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Международное право",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Криминалистика",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          },
-          {
-            "type": "Курсовая работа",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт",
+          "Курсовая работа"
         ]
       },
       {
         "title": "Гражданское право (часть 3, 4)",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Общая физическая подготовка",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": "Зачтено",
-            "passed": true
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Спортивные секции",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Правовые основы оперативно-розыскной деятельности",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Самоорганизация и саморазвитие в высшей школе",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Правоприменительная практика",
         "credits": 3,
         "controls": [
-          {
-            "type": "Диф. зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Диф. зачёт"
         ]
       }
     ],
@@ -1187,143 +827,91 @@
         "title": "Прокурорский надзор",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Криминалистика",
         "credits": 5,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Семейное право",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Криминология",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Исполнительное производство",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Уголовно-исполнительное право",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Земельное право",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Арбитражный процесс",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Доказательства и доказывание в уголовном процессе",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Уголовно-правовое обеспечение национальной безопасности",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Основы научных исследований",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Самоорганизация и саморазвитие в высшей школе",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Судебный контроль в уголовном процессе",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -1332,148 +920,92 @@
         "title": "Арбитражный процесс",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Юридическая психология",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Жилищное право",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Налоговое право",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          },
-          {
-            "type": "Курсовая работа",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт",
+          "Курсовая работа"
         ]
       },
       {
         "title": "Юридический анализ",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Правовые основы противодействия коррупции",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Юридическая риторика",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Назначение уголовного наказания",
         "credits": 5,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Криминалистическое обеспечение национальной безопасности",
         "credits": 5,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Процессуальные акты по уголовным делам",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Проблемы расследования преступлений несовершеннолетних",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Практика по профилю профессиональной деятельности",
         "credits": 3,
         "controls": [
-          {
-            "type": "Диф. зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Диф. зачёт"
         ]
       },
       {
         "title": "Использование специальных знаний в уголовном судопроизводстве",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -1482,143 +1014,91 @@
         "title": "Предпринимательское право",
         "credits": 5,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Международное частное право",
         "credits": 4,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Профессиональная этика юриста и служебный этикет",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Делопроизводство в органах предварительного расследования, прокуратуры и судах",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Психология управления в деятельности правоохранительных органов",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Юридический анализ",
         "credits": 1,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Практический курс по квалификации преступлений",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Расследование организованной преступной деятельности",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Уголовное преследование",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Расследование киберпреступлений",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Обвинение и защита по уголовным делам",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Преступления в сфере экономики",
         "credits": 2,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       },
       {
         "title": "Основы военной подготовки",
         "credits": 3,
         "controls": [
-          {
-            "type": "Зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Зачёт"
         ]
       }
     ],
@@ -1627,44 +1107,28 @@
         "title": "Правоохранительная практика",
         "credits": 6,
         "controls": [
-          {
-            "type": "Диф. зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Диф. зачёт"
         ]
       },
       {
         "title": "Преддипломная практика",
         "credits": 15,
         "controls": [
-          {
-            "type": "Диф. зачёт",
-            "mark": null,
-            "passed": false
-          }
+          "Диф. зачёт"
         ]
       },
       {
         "title": "Подготовка к сдаче и сдача государственного экзамена",
         "credits": 3,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       },
       {
         "title": "Подготовка к процедуре защиты и защита выпускной квалификационной работы",
         "credits": 6,
         "controls": [
-          {
-            "type": "Экзамен",
-            "mark": null,
-            "passed": false
-          }
+          "Экзамен"
         ]
       }
     ]
