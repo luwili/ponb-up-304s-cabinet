@@ -37,6 +37,9 @@ jobs:
           python-version: '3.11'
 
       - name: Sync schedule with ISU UUNiT
+        env:
+          ISU_LOGIN: ${{ secrets.ISU_LOGIN }}
+          ISU_PASSWORD: ${{ secrets.ISU_PASSWORD }}
         run: |
           python3 scripts/sync_uust_schedule.py
           if ! git diff --quiet src/data/schedule.json; then
