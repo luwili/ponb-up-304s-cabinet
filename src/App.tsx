@@ -8,12 +8,9 @@ import { HomePage } from './pages/HomePage';
 import { SchedulePage } from './pages/SchedulePage';
 import { SubjectsPage } from './pages/SubjectsPage';
 import { TopicsPage } from './pages/TopicsPage';
-import { CasesPage } from './pages/CasesPage';
-import { AssignmentsPage } from './pages/AssignmentsPage';
 import { ExamPrepPage } from './pages/ExamPrepPage';
 import { TeachersPage } from './pages/TeachersPage';
 import { DepartmentsPage } from './pages/DepartmentsPage';
-import { RosterPage } from './pages/RosterPage';
 import { InstitutePage } from './pages/InstitutePage';
 import { FavoritesPage } from './pages/FavoritesPage';
 
@@ -36,9 +33,9 @@ export function App() {
     const hash = window.location.hash.replace('#/', '').replace('#', '');
     const tabName = hash.split('?')[0];
     const validTabs = [
-      'home', 'schedule', 'subjects', 'topics', 'cases', 
-      'assignments', 'exam', 'teachers', 'departments', 
-      'roster', 'institute', 'favorites'
+      'home', 'schedule', 'subjects', 'topics', 
+      'exam', 'teachers', 'departments', 
+      'institute', 'favorites'
     ];
     return validTabs.includes(tabName) ? tabName : 'home';
   };
@@ -54,11 +51,7 @@ export function App() {
 
   // User Local State
   const [favorites, setFavorites] = useState<string[]>(() => {
-    return getStoredItem<string[]>(STORAGE_KEYS.FAVORITES, ['ugolov-proc-t1', 'case-up-1']);
-  });
-
-  const [completedTasks, setCompletedTasks] = useState<string[]>(() => {
-    return getStoredItem<string[]>(STORAGE_KEYS.COMPLETED_ASSIGNMENTS, []);
+    return getStoredItem<string[]>(STORAGE_KEYS.FAVORITES, ['gp-para-1', 'gpp-para-1', 'ugolov-t1']);
   });
 
   const [knownCards, setKnownCards] = useState<string[]>(() => {
@@ -103,14 +96,6 @@ export function App() {
     setFavorites((prev) => {
       const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
       setStoredItem(STORAGE_KEYS.FAVORITES, next);
-      return next;
-    });
-  };
-
-  const handleToggleTask = (id: string) => {
-    setCompletedTasks((prev) => {
-      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
-      setStoredItem(STORAGE_KEYS.COMPLETED_ASSIGNMENTS, next);
       return next;
     });
   };
@@ -166,11 +151,6 @@ export function App() {
     handleSelectTab('teachers');
   };
 
-  const handleNavigateCases = (subjectId: string) => {
-    setSelectedSubjectId(subjectId);
-    handleSelectTab('cases');
-  };
-
   const handleSelectDepartment = (deptName: string) => {
     setTeacherSearchQuery(deptName);
     handleSelectTab('teachers');
@@ -204,18 +184,13 @@ export function App() {
           onSelectTab={handleSelectTab}
           mobileOpen={mobileMenuOpen}
           onCloseMobile={() => setMobileMenuOpen(false)}
-          unreadTasksCount={5 - completedTasks.length}
           favoritesCount={favorites.length}
         />
 
         {/* Content Page */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-5xl w-full overflow-hidden">
           {currentTab === 'home' && (
-            <HomePage
-              onNavigate={handleSelectTab}
-              completedTasks={completedTasks}
-              onToggleTask={handleToggleTask}
-            />
+            <HomePage onNavigate={handleSelectTab} />
           )}
 
           {currentTab === 'schedule' && (
@@ -229,7 +204,6 @@ export function App() {
             <SubjectsPage
               onNavigateTopic={handleNavigateTopic}
               onNavigateTeacher={handleNavigateTeacher}
-              onNavigateCases={handleNavigateCases}
               selectedSubjectId={selectedSubjectId}
             />
           )}
@@ -239,21 +213,6 @@ export function App() {
               favorites={favorites}
               onToggleFavorite={handleToggleFavorite}
               selectedTopicId={selectedTopicId}
-            />
-          )}
-
-          {currentTab === 'cases' && (
-            <CasesPage
-              favorites={favorites}
-              onToggleFavorite={handleToggleFavorite}
-              selectedSubjectId={selectedSubjectId}
-            />
-          )}
-
-          {currentTab === 'assignments' && (
-            <AssignmentsPage
-              completedTasks={completedTasks}
-              onToggleTask={handleToggleTask}
             />
           )}
 
@@ -280,10 +239,6 @@ export function App() {
             />
           )}
 
-          {currentTab === 'roster' && (
-            <RosterPage />
-          )}
-
           {currentTab === 'institute' && (
             <InstitutePage />
           )}
@@ -293,7 +248,6 @@ export function App() {
               favorites={favorites}
               onToggleFavorite={handleToggleFavorite}
               onNavigateTopic={handleNavigateTopic}
-              onNavigateCase={handleNavigateCases}
             />
           )}
         </main>
@@ -330,7 +284,6 @@ export function App() {
         currentTab={currentTab}
         onSelectTab={handleSelectTab}
         onOpenMobileMenu={() => setMobileMenuOpen(true)}
-        tasksCount={Math.max(0, 5 - completedTasks.length)}
       />
 
       {/* Search Modal */}

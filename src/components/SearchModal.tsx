@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Search, X, BookOpen, FileText, Scale, Users, Building2, CheckSquare, ArrowRight } from 'lucide-react';
+import { Search, X, BookOpen, FileText, Users, Building2, ArrowRight } from 'lucide-react';
 import subjectsData from '../data/subjects.json';
 import topicsData from '../data/topics.json';
-import casesData from '../data/cases.json';
 import teachersData from '../data/teachers.json';
 import departmentsData from '../data/departments.json';
-import assignmentsData from '../data/assignments.json';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -101,46 +99,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       });
     }
 
-    // 3. Case Problems
-    if (filterType === 'all' || filterType === 'cases') {
-      casesData.forEach((c) => {
-        if (
-          normalize(c.title).includes(q) ||
-          normalize(c.fabula).includes(q) ||
-          normalize(c.shortSolution).includes(q) ||
-          normalize(c.fullSolution).includes(q)
-        ) {
-          list.push({
-            id: `case-${c.id}`,
-            title: c.title,
-            subtitle: c.fabula.slice(0, 100) + '...',
-            category: 'Задача / Практикум',
-            tab: 'cases',
-            itemId: c.id,
-            icon: Scale
-          });
-        }
-      });
-    }
-
-    // 4. Assignments
-    if (filterType === 'all' || filterType === 'assignments') {
-      assignmentsData.forEach((a) => {
-        if (normalize(a.title).includes(q) || normalize(a.description).includes(q) || normalize(a.subjectName).includes(q)) {
-          list.push({
-            id: `asg-${a.id}`,
-            title: a.title,
-            subtitle: `${a.subjectName} · Срок: ${a.deadline || 'Без срока'}`,
-            category: 'Задание',
-            tab: 'assignments',
-            itemId: a.id,
-            icon: CheckSquare
-          });
-        }
-      });
-    }
-
-    // 5. Teachers
+    // 3. Teachers
     if (filterType === 'all' || filterType === 'teachers') {
       teachersData.forEach((t) => {
         if (
@@ -162,7 +121,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       });
     }
 
-    // 6. Departments
+    // 4. Departments
     if (filterType === 'all' || filterType === 'departments') {
       departmentsData.forEach((d) => {
         if (normalize(d.name).includes(q) || normalize(d.description).includes(q) || normalize(d.room).includes(q)) {
@@ -197,7 +156,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Поиск по предметам, конспектам, законам, задачам, преподавателям..."
+            placeholder="Поиск по конспектам, темам, законам, преподавателям..."
             className="w-full h-14 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none text-sm sm:text-base"
           />
           {query && (
@@ -216,8 +175,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             { id: 'all', label: 'Все' },
             { id: 'subjects', label: 'Предметы' },
             { id: 'topics', label: 'Конспекты' },
-            { id: 'cases', label: 'Задачи' },
-            { id: 'assignments', label: 'Задания' },
             { id: 'teachers', label: 'Преподаватели' },
             { id: 'departments', label: 'Кафедры' },
           ].map((f) => (
@@ -280,7 +237,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             </div>
           ) : (
             <div className="p-6 text-center text-xs text-slate-400 dark:text-slate-500">
-              Введите ключевое слово, название закона, статьи, фамилию преподавателя или тему занятия.
+              Введите название темы, статьи закона, преподавателя или дисциплины.
             </div>
           )}
         </div>

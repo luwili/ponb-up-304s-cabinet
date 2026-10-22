@@ -11,8 +11,8 @@
     "examType": "Экзамен",
     "description": "Фундаментальная профильная дисциплина специальности. Изучение стадий уголовного судопроизводства, прав участников, следственных действий, мер пресечения и доказывания.",
     "color": "indigo",
-    "topicsCount": 4,
-    "materialsCount": 12
+    "topicsCount": 1,
+    "materialsCount": 3
   },
   {
     "id": "ugolov-pravo-osob",
@@ -26,8 +26,8 @@
     "examType": "Экзамен",
     "description": "Квалификация преступлений против личности, общественной безопасности, государственной власти, правосудия и национальной безопасности.",
     "color": "red",
-    "topicsCount": 4,
-    "materialsCount": 10
+    "topicsCount": 5,
+    "materialsCount": 15
   },
   {
     "id": "fin-pravo",
@@ -41,8 +41,8 @@
     "examType": "Экзамен",
     "description": "Правовое регулирование государственных и муниципальных финансов, бюджетный процесс, основы налоговой системы, валютного и банковского надзора.",
     "color": "emerald",
-    "topicsCount": 3,
-    "materialsCount": 8
+    "topicsCount": 1,
+    "materialsCount": 3
   },
   {
     "id": "admin-proc",
@@ -56,8 +56,8 @@
     "examType": "Зачёт",
     "description": "Порядок рассмотрения административных дел судами общей юрисдикции по КАС РФ: оспаривание решений органов власти, компенсации, меры принуждения.",
     "color": "sky",
-    "topicsCount": 3,
-    "materialsCount": 7
+    "topicsCount": 0,
+    "materialsCount": 0
   },
   {
     "id": "grazhd-proc",
@@ -71,8 +71,8 @@
     "examType": "Экзамен",
     "description": "Судопроизводство по гражданским делам в судах общей юрисдикции по ГПК РФ. Исковое производство, доказывание, судебные решения и апелляция.",
     "color": "amber",
-    "topicsCount": 3,
-    "materialsCount": 9
+    "topicsCount": 8,
+    "materialsCount": 24
   },
   {
     "id": "grazhd-pravo-2",
@@ -86,8 +86,8 @@
     "examType": "Экзамен",
     "description": "Отдельные виды обязательств по ГК РФ: купля-продажа, аренда, подряд, перевозка, кредитные обязательства, страхование, деликтные обязательства.",
     "color": "violet",
-    "topicsCount": 3,
-    "materialsCount": 8
+    "topicsCount": 8,
+    "materialsCount": 24
   },
   {
     "id": "eco-pravo",
@@ -101,8 +101,8 @@
     "examType": "Зачёт",
     "description": "Правовые механизмы охраны окружающей среды, рационального природопользования, экологический контроль и юридическая ответственность за правонарушения.",
     "color": "teal",
-    "topicsCount": 3,
-    "materialsCount": 6
+    "topicsCount": 0,
+    "materialsCount": 0
   },
   {
     "id": "spec-podgotovka",
@@ -116,8 +116,8 @@
     "examType": "Диф. зачёт",
     "description": "Прикладные навыки обеспечения безопасности, тактика действий сотрудников правоохранительных органов в экстремальных ситуациях и спецсредства.",
     "color": "slate",
-    "topicsCount": 2,
-    "materialsCount": 5
+    "topicsCount": 4,
+    "materialsCount": 12
   },
   {
     "id": "fin-gramotnost",
@@ -131,8 +131,8 @@
     "examType": "Зачёт",
     "description": "Управление личными финансами, инвестиционные инструменты, налоговые вычеты, защита от финансового мошенничества и финансовая кибербезопасность.",
     "color": "blue",
-    "topicsCount": 2,
-    "materialsCount": 4
+    "topicsCount": 1,
+    "materialsCount": 3
   },
   {
     "id": "ofp",
@@ -146,7 +146,7 @@
     "examType": "Зачёт",
     "description": "Развитие общей и профессионально-прикладной физической выносливости, нормативы для сотрудников правоохранительных органов.",
     "color": "rose",
-    "topicsCount": 1,
-    "materialsCount": 2
+    "topicsCount": 0,
+    "materialsCount": 0
   }
 ]

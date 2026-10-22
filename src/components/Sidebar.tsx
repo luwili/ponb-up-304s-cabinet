@@ -4,12 +4,9 @@ import {
   Calendar,
   BookOpen,
   FileText,
-  Scale,
-  CheckSquare,
   GraduationCap,
   Users,
   Building2,
-  ShieldCheck,
   ExternalLink,
   Bookmark,
   X,
@@ -22,7 +19,6 @@ interface SidebarProps {
   onSelectTab: (tab: string) => void;
   mobileOpen: boolean;
   onCloseMobile: () => void;
-  unreadTasksCount?: number;
   favoritesCount?: number;
 }
 
@@ -30,13 +26,10 @@ export const NAV_ITEMS = [
   { id: 'home', label: 'Главная', icon: Home, badge: null },
   { id: 'schedule', label: 'Расписание', icon: Calendar, badge: 'Неделя 8' },
   { id: 'subjects', label: 'Предметы', icon: BookOpen, badge: '10' },
-  { id: 'topics', label: 'Темы и конспекты', icon: FileText, badge: null },
-  { id: 'cases', label: 'Задачи и практикум', icon: Scale, badge: 'Кейсы' },
-  { id: 'assignments', label: 'Задания и дедлайны', icon: CheckSquare, badgeKey: 'tasks' },
+  { id: 'topics', label: 'Темы и конспекты', icon: FileText, badge: '28' },
   { id: 'exam', label: 'Подготовка к экзаменам', icon: GraduationCap, badge: 'Карточки' },
   { id: 'teachers', label: 'Преподаватели', icon: Users, badge: '186' },
   { id: 'departments', label: 'Кафедры', icon: Building2, badge: '8' },
-  { id: 'roster', label: 'Наша группа', icon: ShieldCheck, badge: '304С' },
   { id: 'institute', label: 'Институт и ссылки', icon: ExternalLink, badge: null },
   { id: 'favorites', label: 'Избранное', icon: Bookmark, badgeKey: 'favorites' },
 ];
@@ -46,7 +39,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectTab,
   mobileOpen,
   onCloseMobile,
-  unreadTasksCount = 0,
   favoritesCount = 0
 }) => {
   const handleNavClick = (id: string) => {
@@ -77,9 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             const Icon = item.icon;
             const isActive = currentTab === item.id;
             let badgeText = item.badge;
-            if (item.badgeKey === 'tasks' && unreadTasksCount > 0) {
-              badgeText = `${unreadTasksCount}`;
-            } else if (item.badgeKey === 'favorites' && favoritesCount > 0) {
+            if (item.badgeKey === 'favorites' && favoritesCount > 0) {
               badgeText = `${favoritesCount}`;
             }
 
@@ -118,7 +108,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="pt-4 mt-6 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 space-y-2">
         <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80">
           <div className="font-semibold text-slate-700 dark:text-slate-200">
-            Куратор группы
+            Куратор группы ПОНБ-УП-304С
           </div>
           <div className="text-slate-600 dark:text-slate-300 font-medium">
             Нурмухаметов Руслан Наилевич

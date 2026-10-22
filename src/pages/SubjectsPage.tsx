@@ -6,27 +6,23 @@ import {
   User, 
   Building2, 
   FileText, 
-  Scale, 
-  ArrowRight,
-  Sparkles,
-  ChevronRight
+  ArrowRight, 
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 import subjectsData from '../data/subjects.json';
 import topicsData from '../data/topics.json';
-import casesData from '../data/cases.json';
 import { Subject } from '../types';
 
 interface SubjectsPageProps {
   onNavigateTopic: (topicId: string) => void;
   onNavigateTeacher: (teacherName: string) => void;
-  onNavigateCases: (subjectId: string) => void;
   selectedSubjectId?: string;
 }
 
 export const SubjectsPage: React.FC<SubjectsPageProps> = ({
   onNavigateTopic,
   onNavigateTeacher,
-  onNavigateCases,
   selectedSubjectId
 }) => {
   const [search, setSearch] = useState('');
@@ -59,11 +55,6 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
     return topicsData.filter((t) => t.subjectId === activeSubject.id);
   }, [activeSubject]);
 
-  const subjectCases = useMemo(() => {
-    if (!activeSubject) return [];
-    return casesData.filter((c) => c.subjectId === activeSubject.id);
-  }, [activeSubject]);
-
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
@@ -77,7 +68,7 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
               Учебные дисциплины ПОНБ-УП-304С
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Каталог предметов, темы лекций, практические задачи, конспекты и преподаватели.
+              Каталог предметов, темы лекций, конспекты из базы Study и преподаватели.
             </p>
           </div>
 
@@ -193,7 +184,7 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
         })}
       </div>
 
-      {/* Expanded Subject Drawer / Detail View */}
+      {/* Expanded Subject Detail View */}
       {activeSubject && (
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border-2 border-brand-500 shadow-xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
@@ -219,42 +210,51 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left: Topics / Lectures */}
-            <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left 2 cols: Topics / Lectures */}
+            <div className="lg:col-span-2 space-y-4">
               <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center space-x-2">
                 <FileText className="w-5 h-5 text-brand-600" />
-                <span>Темы и лекционные конспекты ({subjectTopics.length})</span>
+                <span>Лекционные конспекты ({subjectTopics.length})</span>
               </h3>
 
               {subjectTopics.length === 0 ? (
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 text-xs text-slate-500">
-                  Конспекты по этой дисциплине будут загружены при следующем обновлении материалов.
+                <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-center text-xs text-slate-500 space-y-2">
+                  <FileText className="w-8 h-8 mx-auto text-slate-400 opacity-60" />
+                  <p className="font-semibold text-slate-700 dark:text-slate-300">
+                    Конспекты по этой дисциплине в текущем семестре не сформированы
+                  </p>
+                  <p>Ознакомьтесь с материалами смежных предметов в разделе «Конспекты».</p>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {subjectTopics.map((t) => (
                     <div
                       key={t.id}
-                      className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex items-start justify-between gap-3 group"
+                      className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex items-start justify-between gap-3 group hover:border-brand-400 transition-colors"
                     >
-                      <div>
+                      <div className="flex-1 pr-2">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 font-bold">
+                            ~{Math.max(5, Math.ceil(t.fullContent.length / 800))} мин
+                          </span>
+                          {t.verifiedStatus && (
+                            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                              ✓ {t.verifiedStatus}
+                            </span>
+                          )}
+                        </div>
                         <h4 className="font-bold text-slate-900 dark:text-white text-sm group-hover:text-brand-600 transition-colors">
                           {t.title}
                         </h4>
                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
                           {t.description}
                         </p>
-                        {t.verifiedStatus && (
-                          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
-                            ✓ {t.verifiedStatus}
-                          </div>
-                        )}
                       </div>
 
                       <button
                         onClick={() => onNavigateTopic(t.id)}
-                        className="px-3 py-1.5 rounded-lg bg-brand-900 text-white dark:bg-brand-600 text-xs font-semibold hover:bg-brand-800 flex-shrink-0 flex items-center space-x-1"
+                        className="px-3.5 py-2 rounded-xl bg-brand-900 text-white dark:bg-brand-600 text-xs font-semibold hover:bg-brand-800 flex-shrink-0 flex items-center space-x-1 shadow-sm transition-all"
                       >
                         <span>Читать</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -265,58 +265,52 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
               )}
             </div>
 
-            {/* Right: Cases & Teacher details */}
+            {/* Right col: Faculty lead & department card */}
             <div className="space-y-4">
-              <h3 className="font-bold text-slate-900 dark:text-white text-base flex items-center space-x-2">
-                <Scale className="w-5 h-5 text-amber-600" />
-                <span>Практические задачи и судебная практика ({subjectCases.length})</span>
-              </h3>
+              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-4">
+                <h4 className="font-bold text-slate-900 dark:text-white text-sm">
+                  Информация о дисциплине
+                </h4>
 
-              {subjectCases.length === 0 ? (
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 text-xs text-slate-500">
-                  Задачи семинарского типа по предмету готовятся кафедрой.
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {subjectCases.map((c) => (
-                    <div
-                      key={c.id}
-                      className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex items-start justify-between gap-3"
+                <div className="space-y-3 text-xs">
+                  <div>
+                    <span className="text-slate-400 block mb-0.5">Преподаватель:</span>
+                    <button
+                      onClick={() => onNavigateTeacher(activeSubject.teacherName)}
+                      className="font-bold text-slate-900 dark:text-white hover:text-brand-600 text-sm inline-flex items-center space-x-1.5 transition-colors"
                     >
-                      <div>
-                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">
-                          {c.title}
-                        </h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
-                          {c.fabula}
-                        </p>
-                      </div>
+                      <User className="w-4 h-4 text-brand-600" />
+                      <span>{activeSubject.teacherName}</span>
+                    </button>
+                  </div>
 
-                      <button
-                        onClick={() => onNavigateCases(activeSubject.id)}
-                        className="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold hover:bg-amber-400 flex-shrink-0 flex items-center space-x-1"
-                      >
-                        <span>Решать</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                  <div>
+                    <span className="text-slate-400 block mb-0.5">Кафедра:</span>
+                    <div className="text-slate-700 dark:text-slate-300 font-medium">
+                      {activeSubject.departmentName}
                     </div>
-                  ))}
-                </div>
-              )}
+                  </div>
 
-              {/* Faculty lead card */}
-              <div className="mt-4 p-4 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800/60 text-xs space-y-2">
-                <div className="font-bold text-brand-950 dark:text-brand-300">
-                  Преподаватель дисциплины:
-                </div>
-                <button
-                  onClick={() => onNavigateTeacher(activeSubject.teacherName)}
-                  className="font-semibold text-slate-900 dark:text-white hover:underline text-sm block"
-                >
-                  {activeSubject.teacherName}
-                </button>
-                <div className="text-slate-600 dark:text-slate-300">
-                  Кафедра: {activeSubject.departmentName}
+                  <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between">
+                    <span className="text-slate-400">Форма контроля:</span>
+                    <span className="font-bold text-slate-900 dark:text-white">
+                      {activeSubject.examType}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Семестр:</span>
+                    <span className="font-medium text-slate-700 dark:text-slate-300">
+                      5 семестр (3 курс)
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Доступно конспектов:</span>
+                    <span className="font-bold text-brand-700 dark:text-brand-400">
+                      {subjectTopics.length} лекций
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

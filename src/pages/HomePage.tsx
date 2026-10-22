@@ -2,36 +2,28 @@ import React, { useMemo } from 'react';
 import { 
   Calendar, 
   BookOpen, 
-  CheckSquare, 
   Clock, 
   GraduationCap, 
-  Scale, 
   Users, 
   Building2, 
-  AlertCircle, 
   Pin, 
   ArrowRight, 
   Sparkles,
   ShieldCheck,
-  CheckCircle2
+  FileText,
+  Bookmark
 } from 'lucide-react';
 import scheduleData from '../data/schedule.json';
-import assignmentsData from '../data/assignments.json';
 import announcementsData from '../data/announcements.json';
+import topicsData from '../data/topics.json';
 import subjectsData from '../data/subjects.json';
 import { getUfaTimeInfo } from '../utils/time';
 
 interface HomePageProps {
   onNavigate: (tab: string, itemId?: string) => void;
-  completedTasks: string[];
-  onToggleTask: (id: string) => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({
-  onNavigate,
-  completedTasks,
-  onToggleTask
-}) => {
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const timeInfo = getUfaTimeInfo();
 
   // Find schedule for today (or Monday if Sunday)
@@ -40,12 +32,10 @@ export const HomePage: React.FC<HomePageProps> = ({
     return scheduleData.days.find((d) => d.dayOfWeek === todayDayOfWeek) || scheduleData.days[0];
   }, [todayDayOfWeek]);
 
-  // Urgent assignments (first 3 uncompleted)
-  const pendingAssignments = useMemo(() => {
-    return assignmentsData
-      .filter((a) => !completedTasks.includes(a.id))
-      .slice(0, 3);
-  }, [completedTasks]);
+  // Featured study notes
+  const featuredTopics = useMemo(() => {
+    return topicsData.slice(0, 4);
+  }, []);
 
   return (
     <div className="space-y-6 pb-12">
@@ -78,15 +68,15 @@ export const HomePage: React.FC<HomePageProps> = ({
               className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm backdrop-blur-sm border border-white/10 transition-colors"
             >
               <BookOpen className="w-4 h-4" />
-              <span>Конспекты лекций</span>
+              <span>Конспекты лекций ({topicsData.length})</span>
             </button>
 
             <button
-              onClick={() => onNavigate('cases')}
+              onClick={() => onNavigate('subjects')}
               className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm backdrop-blur-sm border border-white/10 transition-colors"
             >
-              <Scale className="w-4 h-4" />
-              <span>Практикум и задачи</span>
+              <GraduationCap className="w-4 h-4" />
+              <span>Предметы семестра</span>
             </button>
           </div>
         </div>
@@ -97,7 +87,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </div>
 
-      {/* Grid: Today's Schedule & Urgent Tasks */}
+      {/* Grid: Today's Schedule & Study Notes Quick Access */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Schedule (2 cols on lg) */}
         <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
@@ -189,26 +179,26 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
         </div>
 
-        {/* Right col: Urgent Tasks & Deadlines */}
+        {/* Right col: Study Notes Quick Access */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center space-x-2.5">
-                <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400">
-                  <CheckSquare className="w-5 h-5" />
+                <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
+                  <FileText className="w-5 h-5" />
                 </div>
                 <div>
                   <h2 className="font-bold text-slate-900 dark:text-white text-base">
-                    Ближайшие задания
+                    Конспекты лекций
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {pendingAssignments.length} активных дедлайнов
+                    {topicsData.length} лекций из архива Study
                   </p>
                 </div>
               </div>
 
               <button
-                onClick={() => onNavigate('assignments')}
+                onClick={() => onNavigate('topics')}
                 className="text-xs font-semibold text-brand-700 dark:text-brand-400 hover:underline flex items-center space-x-1"
               >
                 <span>Все</span>
@@ -217,48 +207,41 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             <div className="space-y-3">
-              {pendingAssignments.length === 0 ? (
-                <div className="py-8 text-center text-slate-400 dark:text-slate-500">
-                  <CheckCircle2 className="w-10 h-10 mx-auto text-emerald-500 mb-2 opacity-80" />
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">Все задания выполнены!</p>
-                  <p className="text-xs mt-1">Отличная работа, группа 304С.</p>
-                </div>
-              ) : (
-                pendingAssignments.map((asg) => (
+              {featuredTopics.map((topic) => {
+                const sub = subjectsData.find((s) => s.id === topic.subjectId);
+                const readTime = Math.max(5, Math.ceil(topic.fullContent.length / 800));
+                return (
                   <div
-                    key={asg.id}
-                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 flex items-start space-x-3 group"
+                    key={topic.id}
+                    onClick={() => onNavigate('topics', topic.id)}
+                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 hover:border-brand-400 cursor-pointer transition-all group"
                   >
-                    <button
-                      onClick={() => onToggleTask(asg.id)}
-                      className="mt-0.5 flex-shrink-0 text-slate-400 hover:text-emerald-600 transition-colors"
-                      title="Отметить выполненным"
-                    >
-                      <div className="w-4 h-4 rounded border-2 border-slate-400 dark:border-slate-600 group-hover:border-emerald-500" />
-                    </button>
-
-                    <div className="flex-1 truncate">
-                      <div className="text-xs font-semibold text-slate-900 dark:text-white truncate">
-                        {asg.title}
-                      </div>
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                        {asg.subjectName}
-                      </div>
-                      {asg.deadline && (
-                        <div className="inline-flex items-center space-x-1 text-[10px] font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/50 px-1.5 py-0.5 rounded mt-1.5">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>Срок: {asg.deadline}</span>
-                        </div>
-                      )}
+                    <div className="flex items-center justify-between text-[10px] font-semibold text-brand-700 dark:text-brand-400 mb-1">
+                      <span className="truncate">{sub?.shortTitle || sub?.title || 'Конспект'}</span>
+                      <span className="text-slate-400 font-mono flex-shrink-0">{readTime} мин</span>
+                    </div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-brand-600 transition-colors line-clamp-1">
+                      {topic.title}
+                    </div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                      {topic.description}
                     </div>
                   </div>
-                ))
-              )}
+                );
+              })}
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400">
-            Личные отметки сохраняются в вашем браузере.
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <span className="text-xs text-slate-400">
+              Гражданское, Уголовное, Процесс, СМЭ
+            </span>
+            <button
+              onClick={() => onNavigate('topics')}
+              className="text-xs font-bold text-brand-700 dark:text-brand-400 hover:underline"
+            >
+              Открыть каталог →
+            </button>
           </div>
         </div>
       </div>
@@ -322,13 +305,13 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { id: 'subjects', title: 'Предметы', desc: '10 дисциплин семестра', icon: BookOpen, color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/60' },
-            { id: 'topics', title: 'Конспекты', desc: 'Полные и краткие лекции', icon: GraduationCap, color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60' },
-            { id: 'cases', title: 'Практикум', desc: 'Фабулы дел и задачи', icon: Scale, color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/60' },
-            { id: 'exam', title: 'Флеш-карты', desc: 'Подготовка к экзаменам', icon: CheckSquare, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },
+            { id: 'topics', title: 'Конспекты лекций', desc: '28 лекций из архива Study', icon: GraduationCap, color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60' },
+            { id: 'schedule', title: 'Расписание', desc: 'Звонки и пары на неделю', icon: Calendar, color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/60' },
+            { id: 'exam', title: 'Флеш-карты', desc: 'Подготовка к экзаменам', icon: Sparkles, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },
             { id: 'teachers', title: 'Преподаватели', desc: 'Справочник института (186)', icon: Users, color: 'text-blue-600 bg-blue-50 dark:bg-blue-950/60' },
             { id: 'departments', title: 'Кафедры', desc: '8 кафедр Института права', icon: Building2, color: 'text-sky-600 bg-sky-50 dark:bg-sky-950/60' },
-            { id: 'roster', title: 'Наша группа', desc: 'ПОНБ-УП-304С, куратор', icon: ShieldCheck, color: 'text-purple-600 bg-purple-50 dark:bg-purple-950/60' },
             { id: 'institute', title: 'Институт УУНиТ', desc: 'Контакты, справки, ссылки', icon: ArrowRight, color: 'text-slate-600 bg-slate-100 dark:bg-slate-800' },
+            { id: 'favorites', title: 'Избранное', desc: 'Сохраненные лекции', icon: Bookmark, color: 'text-purple-600 bg-purple-50 dark:bg-purple-950/60' },
           ].map((item) => {
             const Icon = item.icon;
             return (
