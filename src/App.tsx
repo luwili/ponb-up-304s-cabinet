@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { SearchModal } from './components/SearchModal';
+import { SyncScheduleModal } from './components/SyncScheduleModal';
 
 import { HomePage } from './pages/HomePage';
 import { SchedulePage } from './pages/SchedulePage';
@@ -48,6 +49,7 @@ export function App() {
   // Modals & Drawers
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [syncModalOpen, setSyncModalOpen] = useState(false);
 
   // User Local State
   const [favorites, setFavorites] = useState<string[]>(() => {
@@ -190,13 +192,17 @@ export function App() {
         {/* Content Page */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-5xl w-full overflow-hidden">
           {currentTab === 'home' && (
-            <HomePage onNavigate={handleSelectTab} />
+            <HomePage 
+              onNavigate={handleSelectTab} 
+              onOpenSync={() => setSyncModalOpen(true)}
+            />
           )}
 
           {currentTab === 'schedule' && (
             <SchedulePage
               onNavigateTeacher={handleNavigateTeacher}
               onNavigateSubject={handleNavigateSubject}
+              onOpenSync={() => setSyncModalOpen(true)}
             />
           )}
 
@@ -291,6 +297,12 @@ export function App() {
         isOpen={searchModalOpen}
         onClose={() => setSearchModalOpen(false)}
         onNavigate={handleGlobalNavigate}
+      />
+
+      {/* Sync Schedule Modal */}
+      <SyncScheduleModal
+        isOpen={syncModalOpen}
+        onClose={() => setSyncModalOpen(false)}
       />
     </div>
   );

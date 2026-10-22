@@ -8,7 +8,8 @@ import {
   Info,
   ChevronLeft,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  RefreshCw
 } from 'lucide-react';
 import scheduleData from '../data/schedule.json';
 import { getUfaTimeInfo } from '../utils/time';
@@ -16,11 +17,13 @@ import { getUfaTimeInfo } from '../utils/time';
 interface SchedulePageProps {
   onNavigateTeacher?: (teacherName: string) => void;
   onNavigateSubject?: (subjectId: string) => void;
+  onOpenSync?: () => void;
 }
 
 export const SchedulePage: React.FC<SchedulePageProps> = ({
   onNavigateTeacher,
-  onNavigateSubject
+  onNavigateSubject,
+  onOpenSync
 }) => {
   const timeInfo = getUfaTimeInfo();
   const [viewMode, setViewMode] = useState<'day' | 'week'>('day');
@@ -58,28 +61,41 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({
           </p>
         </div>
 
-        {/* View Toggle */}
-        <div className="flex items-center space-x-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl self-start sm:self-auto border border-slate-200 dark:border-slate-700">
-          <button
-            onClick={() => setViewMode('day')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              viewMode === 'day'
-                ? 'bg-white dark:bg-slate-900 text-brand-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-            }`}
-          >
-            Режим: День
-          </button>
-          <button
-            onClick={() => setViewMode('week')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              viewMode === 'week'
-                ? 'bg-white dark:bg-slate-900 text-brand-900 dark:text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
-            }`}
-          >
-            Режим: Вся неделя
-          </button>
+        {/* Actions & View Toggle */}
+        <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+          {onOpenSync && (
+            <button
+              onClick={onOpenSync}
+              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold shadow-sm transition-all hover:scale-105 active:scale-95"
+              title="Запустить скрипт синхронизации с ИСУ УУНиТ"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Запросить обновление</span>
+            </button>
+          )}
+
+          <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+            <button
+              onClick={() => setViewMode('day')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                viewMode === 'day'
+                  ? 'bg-white dark:bg-slate-900 text-brand-900 dark:text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+              }`}
+            >
+              Режим: День
+            </button>
+            <button
+              onClick={() => setViewMode('week')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                viewMode === 'week'
+                  ? 'bg-white dark:bg-slate-900 text-brand-900 dark:text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+              }`}
+            >
+              Режим: Вся неделя
+            </button>
+          </div>
         </div>
       </div>
 

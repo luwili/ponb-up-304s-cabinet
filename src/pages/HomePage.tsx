@@ -11,7 +11,8 @@ import {
   Sparkles,
   ShieldCheck,
   FileText,
-  Bookmark
+  Bookmark,
+  RefreshCw
 } from 'lucide-react';
 import scheduleData from '../data/schedule.json';
 import announcementsData from '../data/announcements.json';
@@ -21,9 +22,10 @@ import { getUfaTimeInfo } from '../utils/time';
 
 interface HomePageProps {
   onNavigate: (tab: string, itemId?: string) => void;
+  onOpenSync?: () => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
+export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync }) => {
   const timeInfo = getUfaTimeInfo();
 
   // Find schedule for today (or Monday if Sunday)
@@ -107,13 +109,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              <button
-                onClick={() => onNavigate('schedule')}
-                className="text-xs font-semibold text-brand-700 dark:text-brand-400 hover:underline flex items-center space-x-1"
-              >
-                <span>Вся неделя</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <div className="flex items-center space-x-3">
+                {onOpenSync && (
+                  <button
+                    onClick={onOpenSync}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors"
+                    title="Запросить синхронизацию расписания с ИСУ УУНиТ"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <button
+                  onClick={() => onNavigate('schedule')}
+                  className="text-xs font-semibold text-brand-700 dark:text-brand-400 hover:underline flex items-center space-x-1"
+                >
+                  <span>Вся неделя</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
             {/* List of pairs */}
