@@ -4,7 +4,7 @@
  */
 
 export const REPO_OWNER = 'luwili';
-export const REPO_NAME = 'ponb-up-304s-cabinet';
+export const REPO_NAME = 'study_room';
 export const WORKFLOW_ID = 'deploy.yml';
 
 // Защищенный токен запуска облачной задачи

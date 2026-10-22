@@ -435,34 +435,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
         )}
       </div>
 
-      {/* Sincere Gratitude Tribute Callout */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-400/30 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
-        <div className="flex items-center space-x-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
-            <HeartHandshake className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
-              Почётные меценаты проекта
-            </div>
-            <h3 className="font-bold text-slate-900 dark:text-white text-base">
-              Иванова Яна Сергеевна & Николаев Владислав Викторович
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Выражаем искреннее уважение и благодарность за финансирование образовательного кабинета ПОНБ-УП-304С
-            </p>
-          </div>
-        </div>
-
-        <button
-          onClick={() => onNavigate('gratitude')}
-          className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-sm hover:shadow transition-all flex-shrink-0"
-        >
-          <span>Зал признания</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
-      </div>
-
       {/* Quick Navigation Cards */}
       <div>
         <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
@@ -476,7 +448,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
             { id: 'exam', title: 'Флеш-карты', desc: 'Подготовка к экзаменам', icon: Sparkles, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },
             { id: 'teachers', title: 'Преподаватели', desc: 'Справочник института (186)', icon: Users, color: 'text-blue-600 bg-blue-50 dark:bg-blue-950/60' },
             { id: 'departments', title: 'Кафедры', desc: '8 кафедр Института права', icon: Building2, color: 'text-sky-600 bg-sky-50 dark:bg-sky-950/60' },
-            { id: 'gratitude', title: 'Благодарность', desc: 'Спонсоры и меценаты проекта', icon: HeartHandshake, color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/60' },
+            { id: 'gratitude', title: 'Благодарность', desc: 'Спонсоры проекта', icon: HeartHandshake, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },
             { id: 'institute', title: 'Институт УУНиТ', desc: 'Контакты, справки, ссылки', icon: ArrowRight, color: 'text-slate-600 bg-slate-100 dark:bg-slate-800' },
             { id: 'favorites', title: 'Избранное', desc: 'Сохраненные лекции', icon: Bookmark, color: 'text-purple-600 bg-purple-50 dark:bg-purple-950/60' },
           ].map((item) => {

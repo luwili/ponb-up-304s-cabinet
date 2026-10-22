@@ -2,8 +2,8 @@
 
 Официальный учебный веб-портал и электронный кабинет для студентов группы **ПОНБ-УП-304С** специальности «Правовое обеспечение национальной безопасности» (уголовно-правовая специализация) **Института права Уфимского университета науки и технологий** (г. Уфа).
 
-- **Опубликованный сайт на GitHub Pages:** [https://luwili.github.io/ponb-up-304s-cabinet/](https://luwili.github.io/ponb-up-304s-cabinet/)
-- **Репозиторий проекта:** [https://github.com/luwili/ponb-up-304s-cabinet](https://github.com/luwili/ponb-up-304s-cabinet)
+- **Опубликованный сайт на GitHub Pages:** [https://luwili.github.io/study_room/](https://luwili.github.io/study_room/)
+- **Репозиторий проекта:** [https://github.com/luwili/study_room](https://github.com/luwili/study_room)
 - **Город и часовой пояс:** г. Уфа, Республика Башкортостан (`Asia/Yekaterinburg`, UTC+5)
 - **Куратор группы:** ст. преподаватель кафедры уголовного права и процесса Нурмухаметов Руслан Наилевич
 
@@ -176,7 +176,7 @@ GitHub Actions автоматически:
 1. Установит зависимости через `npm ci`.
 2. Проверит TypeScript-типы (`npm run check`).
 3. Соберет оптимизированный бандл (`npm run build`).
-4. Опубликует сайт на **GitHub Pages**: [https://luwili.github.io/ponb-up-304s-cabinet/](https://luwili.github.io/ponb-up-304s-cabinet/)
+4. Опубликует сайт на **GitHub Pages**: [https://luwili.github.io/study_room/](https://luwili.github.io/study_room/)
 
 Статус сборки и логи можно отслеживать во вкладке **Actions** вашего репозитория:
-[https://github.com/luwili/ponb-up-304s-cabinet/actions](https://github.com/luwili/ponb-up-304s-cabinet/actions)
+[https://github.com/luwili/study_room/actions](https://github.com/luwili/study_room/actions)

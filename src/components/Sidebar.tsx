@@ -32,7 +32,7 @@ export const NAV_ITEMS = [
   { id: 'teachers', label: 'Преподаватели', icon: Users, badge: '186' },
   { id: 'departments', label: 'Кафедры', icon: Building2, badge: '8' },
   { id: 'institute', label: 'Институт и ссылки', icon: ExternalLink, badge: null },
-  { id: 'gratitude', label: 'Искренняя благодарность', icon: HeartHandshake, badge: 'Меценаты' },
+  { id: 'gratitude', label: 'Искренняя благодарность', icon: HeartHandshake, badge: null },
   { id: 'favorites', label: 'Избранное', icon: Bookmark, badgeKey: 'favorites' },
 ];
 

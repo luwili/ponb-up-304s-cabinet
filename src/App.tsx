@@ -295,9 +295,9 @@ export function App() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => handleSelectTab('gratitude')}
-              className="inline-flex items-center space-x-1.5 text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-semibold transition-colors"
+              className="text-slate-600 dark:text-slate-400 hover:text-brand-700 dark:hover:text-brand-300 hover:underline transition-colors"
             >
-              <span>💛 Искренняя благодарность меценатам</span>
+              <span>Искренняя благодарность</span>
             </button>
             <span>·</span>
             <a
