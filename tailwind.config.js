@@ -27,7 +27,26 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: [
+          '"Anthropic Serif Web"',
+          '"Anthropic Serif"',
+          '"Source Serif 4"',
+          '"Newsreader"',
+          'Georgia',
+          'Cambria',
+          '"Times New Roman"',
+          'serif',
+        ],
+        serif: [
+          '"Anthropic Serif Web"',
+          '"Anthropic Serif"',
+          '"Source Serif 4"',
+          '"Newsreader"',
+          'Georgia',
+          'Cambria',
+          '"Times New Roman"',
+          'serif',
+        ],
       }
     },
   },

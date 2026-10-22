@@ -31,26 +31,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Sync schedule with ISU UUNiT
+      - name: High-speed sync with ISU UUNiT (Schedule & Announcements)
         env:
           ISU_LOGIN: ${{ secrets.ISU_LOGIN }}
           ISU_PASSWORD: ${{ secrets.ISU_PASSWORD }}
         run: |
-          python3 scripts/sync_uust_schedule.py
-          if ! git diff --quiet src/data/schedule.json; then
-            echo "Обнаружены изменения в расписании. Сохраняем в репозиторий..."
+          python3 scripts/sync_uust_schedule.py --force
+          if ! git diff --quiet src/data/schedule.json src/data/announcements.json; then
+            echo "Обнаружены изменения в расписании или объявлениях. Фиксация в репозитории..."
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add src/data/schedule.json
-            git commit -m "chore(schedule): автоматическая синхронизация расписания из ИСУ УУНиТ [skip ci]"
+            git add src/data/schedule.json src/data/announcements.json
+            git commit -m "chore(sync): синхронизация расписания и объявлений из ИСУ УУНиТ [skip ci]"
             git push origin main
           else
-            echo "Изменений в расписании нет."
+            echo "Данные расписания и объявлений актуальны."
           fi
 
       - name: Setup Node.js

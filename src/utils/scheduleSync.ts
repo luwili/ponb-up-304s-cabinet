@@ -1,5 +1,5 @@
 /**
- * Фоновая синхронизация расписания с ИСУ УУНиТ
+ * Фоновая высокоскоростная синхронизация расписания и объявлений с ИСУ УУНиТ
  * без ввода токенов пользователем.
  */
 
@@ -38,8 +38,8 @@ export async function triggerOneClickSync(
   ) {
     onStatusChange({
       state: 'starting',
-      title: 'Синхронизация расписания',
-      message: 'Запуск локального скрипта python3 scripts/sync_uust_schedule.py...'
+      title: 'Синхронизация с ИСУ УУНиТ',
+      message: 'Запуск ускоренной выгрузки расписания и объявлений...'
     });
 
     try {
@@ -47,11 +47,11 @@ export async function triggerOneClickSync(
       if (res.ok) {
         onStatusChange({
           state: 'success',
-          title: 'Расписание обновлено!',
-          message: 'Данные получены из ИСУ УУНиТ. Перезагрузка страницы...',
-          countdown: 3
+          title: 'Данные обновлены!',
+          message: 'Расписание и объявления института выгружены. Перезагрузка...',
+          countdown: 2
         });
-        let c = 3;
+        let c = 2;
         const interval = setInterval(() => {
           c -= 1;
           if (c <= 0) {
@@ -60,8 +60,8 @@ export async function triggerOneClickSync(
           } else {
             onStatusChange({
               state: 'success',
-              title: 'Расписание обновлено!',
-              message: `Данные получены из ИСУ УУНиТ. Перезагрузка через ${c} сек...`,
+              title: 'Данные обновлены!',
+              message: `Перезагрузка через ${c} сек...`,
               countdown: c
             });
           }
@@ -77,7 +77,7 @@ export async function triggerOneClickSync(
   onStatusChange({
     state: 'starting',
     title: 'Запрос обновления',
-    message: 'Отправка команды в облачный сервис синхронизации...'
+    message: 'Отправка быстрой команды синхронизации расписания и объявлений...'
   });
 
   const token = getDispatchAuth();
@@ -127,15 +127,15 @@ export async function triggerOneClickSync(
   // Скрипт запущен, переходим в режим отслеживания
   onStatusChange({
     state: 'running',
-    title: 'Скрипт работает в фоне',
-    message: 'Авторизация в личном кабинете isu.uust.ru и сбор актуального расписания...'
+    title: 'Синхронизация с ИСУ УУНиТ',
+    message: 'Параллельная выгрузка расписания пар и объявлений института...'
   });
 
-  // Ждём 3 секунды перед началом опроса
-  await new Promise((r) => setTimeout(r, 3000));
+  // Быстрая пауза перед первым опросом (1 секунда)
+  await new Promise((r) => setTimeout(r, 1000));
 
   const startTime = Date.now();
-  const timeoutMs = 150000; // 2.5 минуты
+  const timeoutMs = 120000; // 2 минуты
   let targetRunId: number | null = null;
 
   while (Date.now() - startTime < timeoutMs) {
@@ -157,7 +157,7 @@ export async function triggerOneClickSync(
         if (!targetRunId && runs.length > 0) {
           const recentRun = runs.find((r: any) => {
             const runCreated = new Date(r.created_at).getTime();
-            return Math.abs(Date.now() - runCreated) < 60000;
+            return Math.abs(Date.now() - runCreated) < 45000;
           });
           if (recentRun) {
             targetRunId = recentRun.id;
@@ -171,12 +171,12 @@ export async function triggerOneClickSync(
               if (run.conclusion === 'success') {
                 onStatusChange({
                   state: 'success',
-                  title: 'Синхронизация завершена!',
-                  message: 'Свежие данные из ИСУ УУНиТ получены. Перезагрузка страницы...',
-                  countdown: 3
+                  title: 'Расписание и объявления обновлены!',
+                  message: 'Свежие данные получены из ИСУ УУНиТ. Перезагрузка страницы...',
+                  countdown: 2
                 });
 
-                let c = 3;
+                let c = 2;
                 const interval = setInterval(() => {
                   c -= 1;
                   if (c <= 0) {
@@ -185,7 +185,7 @@ export async function triggerOneClickSync(
                   } else {
                     onStatusChange({
                       state: 'success',
-                      title: 'Синхронизация завершена!',
+                      title: 'Расписание и объявления обновлены!',
                       message: `Свежие данные получены. Перезагрузка через ${c} сек...`,
                       countdown: c
                     });
@@ -195,7 +195,7 @@ export async function triggerOneClickSync(
               } else {
                 onStatusChange({
                   state: 'error',
-                  title: 'Ошибка сборки',
+                  title: 'Ошибка синхронизации',
                   message: `Задача завершилась со статусом: ${run.conclusion}. Попробуйте повторить.`
                 });
                 return;
@@ -204,7 +204,7 @@ export async function triggerOneClickSync(
               onStatusChange({
                 state: 'running',
                 title: 'Скрипт работает в фоне',
-                message: 'Парсинг пар и публикация обновлённого расписания на сайт...'
+                message: 'Парсинг данных из ИСУ и мгновенная пересборка сайта...'
               });
             }
           }
@@ -214,14 +214,14 @@ export async function triggerOneClickSync(
       console.warn('Poll error:', e);
     }
 
-    await new Promise((r) => setTimeout(r, 4000));
+    await new Promise((r) => setTimeout(r, 2500));
   }
 
   // Если опрос завершился по тайм-ауту, уведомляем о перезагрузке
   onStatusChange({
     state: 'success',
     title: 'Обновление завершается',
-    message: 'Задача отправлена. Перезагрузка страницы...',
+    message: 'Синхронизация отправлена. Перезагрузка страницы...',
     countdown: 2
   });
   setTimeout(() => window.location.reload(), 2000);

@@ -78,6 +78,8 @@ export interface Announcement {
   isPinned: boolean;
   author: string;
   tag: string;
+  url?: string;
+  imageUrl?: string;
 }
 
 export interface ExamCard {

@@ -2,10 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Anthropic Serif Web - Core Typefaces */
+@font-face {
+  font-family: 'Anthropic Serif Web';
+  src: url('./assets/fonts/AnthropicSerif-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anthropic Serif Web';
+  src: url('./assets/fonts/AnthropicSerif-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anthropic Serif Web';
+  src: url('./assets/fonts/AnthropicSerif-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anthropic Serif Web';
+  src: url('./assets/fonts/AnthropicSerif-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Anthropic Serif Alias */
+@font-face {
+  font-family: 'Anthropic Serif';
+  src: url('./assets/fonts/AnthropicSerif-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anthropic Serif';
+  src: url('./assets/fonts/AnthropicSerif-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Anthropic Serif';
+  src: url('./assets/fonts/AnthropicSerif-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  html, body, #root, button, input, select, textarea {
+    font-family: 'Anthropic Serif Web', 'Anthropic Serif', 'Source Serif 4', 'Newsreader', Georgia, 'Times New Roman', serif;
   }
 
   body {
