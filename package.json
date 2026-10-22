@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "content:prepare": "python3 scripts/import_content.py",
     "content:import": "python3 scripts/import_content.py",
+    "schedule:sync": "python3 scripts/sync_uust_schedule.py",
     "institute:sync": "python3 scripts/sync_institute.py"
   },
   "dependencies": {
