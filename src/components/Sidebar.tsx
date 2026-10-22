@@ -11,7 +11,8 @@ import {
   Bookmark,
   X,
   Phone,
-  MapPin
+  MapPin,
+  HeartHandshake
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -31,6 +32,7 @@ export const NAV_ITEMS = [
   { id: 'teachers', label: 'Преподаватели', icon: Users, badge: '186' },
   { id: 'departments', label: 'Кафедры', icon: Building2, badge: '8' },
   { id: 'institute', label: 'Институт и ссылки', icon: ExternalLink, badge: null },
+  { id: 'gratitude', label: 'Искренняя благодарность', icon: HeartHandshake, badge: 'Меценаты' },
   { id: 'favorites', label: 'Избранное', icon: Bookmark, badgeKey: 'favorites' },
 ];
 

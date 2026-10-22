@@ -14,6 +14,7 @@ import { ExamPrepPage } from './pages/ExamPrepPage';
 import { TeachersPage } from './pages/TeachersPage';
 import { DepartmentsPage } from './pages/DepartmentsPage';
 import { InstitutePage } from './pages/InstitutePage';
+import { GratitudePage } from './pages/GratitudePage';
 import { FavoritesPage } from './pages/FavoritesPage';
 
 import { 
@@ -37,7 +38,7 @@ export function App() {
     const validTabs = [
       'home', 'schedule', 'subjects', 'topics', 
       'exam', 'teachers', 'departments', 
-      'institute', 'favorites'
+      'institute', 'gratitude', 'favorites'
     ];
     return validTabs.includes(tabName) ? tabName : 'home';
   };
@@ -266,6 +267,10 @@ export function App() {
             <InstitutePage />
           )}
 
+          {currentTab === 'gratitude' && (
+            <GratitudePage />
+          )}
+
           {currentTab === 'favorites' && (
             <FavoritesPage
               favorites={favorites}
@@ -287,7 +292,14 @@ export function App() {
             <span>Институт права УУНиТ (г. Уфа)</span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={() => handleSelectTab('gratitude')}
+              className="inline-flex items-center space-x-1.5 text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-semibold transition-colors"
+            >
+              <span>💛 Искренняя благодарность меценатам</span>
+            </button>
+            <span>·</span>
             <a
               href="https://law-bsu.ru/"
               target="_blank"
