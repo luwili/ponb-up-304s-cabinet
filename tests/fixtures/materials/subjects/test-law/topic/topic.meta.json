@@ -1,0 +1,10 @@
+{
+  "id": "test-topic",
+  "title": "Тестовая тема",
+  "subjectId": "test-law",
+  "materials": [
+    {"file":"Полный конспект.md","material":{"id":"test-full","title":"Полный тестовый конспект","type":"Конспект","variant":"full","tags":["учёба"]}},
+    {"file":"Кратко.md","material":{"id":"test-short","title":"Краткий тестовый конспект","type":"Конспект","variant":"short"}},
+    {"file":"Задача.md","material":{"id":"test-task","title":"Тестовая задача","type":"Задача","task":{"condition":"Тестовое условие без юридической позиции.","questions":["Работает ли переключатель?"],"solution":"Тестовое решение.","shortSolution":"Тестовый ответ.","sources":[]}}}
+  ]
+}

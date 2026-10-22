@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "default": "ПОНБ-УП-304С",
+      "type": "string",
+      "const": "ПОНБ-УП-304С"
+    },
+    "specialty": {
+      "default": "Правовое обеспечение национальной безопасности",
+      "type": "string",
+      "minLength": 1
+    },
+    "timezone": {
+      "default": "Asia/Yekaterinburg",
+      "type": "string",
+      "const": "Asia/Yekaterinburg"
+    },
+    "course": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semester": {
+      "type": "string",
+      "minLength": 1
+    },
+    "studyForm": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semesterStart": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "semesterEnd": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "referenceWeek": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "publishRoster": {
+      "default": false,
+      "type": "boolean"
+    },
+    "groupTeacherIds": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\p{L}\\p{N}_-]+$"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "specialty",
+    "timezone",
+    "publishRoster",
+    "groupTeacherIds"
+  ],
+  "additionalProperties": false
+}

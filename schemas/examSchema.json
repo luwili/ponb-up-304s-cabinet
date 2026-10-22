@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[\\p{L}\\p{N}_-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subjectId": {
+      "type": "string",
+      "pattern": "^[\\p{L}\\p{N}_-]+$"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "materialIds": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[\\p{L}\\p{N}_-]+$"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "subjectId",
+    "materialIds"
+  ],
+  "additionalProperties": false
+}

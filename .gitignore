@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+private-data/
+**/roster*.json
+**/roster*.csv
+!examples/roster.json
+!examples/roster.csv
+reports/
+test-results/
+playwright-report/
+*.local
+.DS_Store
+/Список группы.md
+/Расписание на 19-25 ноября.png
+/public/.generated-*
+/public/.backup-*
