@@ -1,19 +1,22 @@
+# Dependencies
 node_modules/
+
+# Production build
 dist/
+dist-ssr/
+
+# Environment files
 .env
 .env.*
 !.env.example
+
+# Private student data (STRICT REQUIREMENT)
 private-data/
-**/roster*.json
-**/roster*.csv
-!examples/roster.json
-!examples/roster.csv
-reports/
-test-results/
-playwright-report/
-*.local
+Список группы.md
+*.roster.*
+
+# System / Editor
 .DS_Store
-/Список группы.md
-/Расписание на 19-25 ноября.png
-/public/.generated-*
-/public/.backup-*
+*.log
+.vscode/
+.idea/
