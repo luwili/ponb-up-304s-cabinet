@@ -18,10 +18,13 @@ import {
   ChevronUp
 } from 'lucide-react';
 import scheduleData from '../data/schedule.json';
-import announcementsData from '../data/announcements.json';
+import rawAnnouncements from '../data/announcements.json';
 import topicsData from '../data/topics.json';
 import subjectsData from '../data/subjects.json';
 import { getUfaTimeInfo } from '../utils/time';
+import { Announcement } from '../types';
+
+const announcementsData: Announcement[] = rawAnnouncements as unknown as Announcement[];
 
 interface HomePageProps {
   onNavigate: (tab: string, itemId?: string) => void;

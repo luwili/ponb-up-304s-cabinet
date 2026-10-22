@@ -237,7 +237,7 @@ def fetch_announcements_isu(opener):
         except Exception:
             pass
 
-        return {
+        item_dict = {
             "id": f"ann-isu-{art_hash[:8]}",
             "title": title,
             "content": summary or title,
@@ -245,9 +245,12 @@ def fetch_announcements_isu(opener):
             "isPinned": False,
             "author": "Институт / Ректорат УУНиТ",
             "tag": "Институт",
-            "url": full_url,
-            "imageUrl": img_url or None
+            "url": full_url
         }
+        if img_url:
+            item_dict["imageUrl"] = img_url
+
+        return item_dict
 
     with ThreadPoolExecutor(max_workers=5) as pool:
         parsed_items = [res for res in pool.map(parse_item, items[:6]) if res]
