@@ -130,7 +130,7 @@
   }
 
   .print-readable {
-    font-family: Georgia, serif !important;
+    font-family: 'Anthropic Serif Web', 'Anthropic Serif', Georgia, serif !important;
     max-width: 100% !important;
   }
 
@@ -139,3 +139,93 @@
     color: black !important;
   }
 }
+
+/* Styled Markdown Content for Topics and Conspects */
+.study-markdown {
+  @apply text-slate-800 dark:text-slate-100 font-serif leading-relaxed;
+}
+
+.study-markdown h1 {
+  @apply text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white pt-4 pb-3 mb-6 border-b border-slate-200 dark:border-slate-800 tracking-tight;
+}
+
+.study-markdown h2 {
+  @apply text-xl sm:text-2xl font-bold text-slate-900 dark:text-white pt-6 pb-2.5 mb-4 border-b border-slate-200/80 dark:border-slate-800/80 scroll-mt-24 tracking-tight;
+}
+
+.study-markdown h3 {
+  @apply text-lg sm:text-xl font-bold text-slate-850 dark:text-slate-100 pt-5 pb-2 mb-3 scroll-mt-24 tracking-tight;
+}
+
+.study-markdown h4 {
+  @apply text-base font-bold text-slate-700 dark:text-slate-300 pt-3 pb-1 mb-2 scroll-mt-24;
+}
+
+.study-markdown p {
+  @apply mb-4 leading-relaxed text-justify;
+}
+
+.study-markdown blockquote {
+  @apply my-5 p-4 sm:p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/25 border-l-4 border-amber-500 text-slate-800 dark:text-amber-100/90 text-sm sm:text-base leading-relaxed italic shadow-sm;
+}
+
+.study-markdown blockquote p:last-child {
+  @apply mb-0;
+}
+
+.study-markdown ul {
+  @apply list-disc pl-6 mb-4 space-y-1.5 marker:text-brand-600 dark:marker:text-brand-400;
+}
+
+.study-markdown ol {
+  @apply list-decimal pl-6 mb-4 space-y-1.5 marker:font-semibold marker:text-slate-700 dark:marker:text-slate-300;
+}
+
+.study-markdown li {
+  @apply leading-relaxed pl-1;
+}
+
+.study-markdown strong {
+  @apply font-bold text-slate-900 dark:text-white;
+}
+
+.study-markdown em {
+  @apply italic text-slate-800 dark:text-slate-200;
+}
+
+.study-markdown table {
+  @apply w-full text-left border-collapse text-xs sm:text-sm my-6 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800;
+}
+
+.study-markdown thead {
+  @apply bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-white font-bold border-b border-slate-200 dark:border-slate-700;
+}
+
+.study-markdown th {
+  @apply px-4 py-2.5 font-bold;
+}
+
+.study-markdown td {
+  @apply px-4 py-2.5 border-t border-slate-100 dark:border-slate-800;
+}
+
+.study-markdown code {
+  @apply px-1.5 py-0.5 rounded text-xs font-mono bg-slate-100 dark:bg-slate-800 text-brand-800 dark:text-brand-300 border border-slate-200 dark:border-slate-700;
+}
+
+.study-markdown pre {
+  @apply p-4 my-4 rounded-xl bg-slate-900 text-slate-100 text-xs overflow-x-auto;
+}
+
+.study-markdown pre code {
+  @apply bg-transparent text-slate-100 p-0 border-0;
+}
+
+.study-markdown hr {
+  @apply my-8 border-0 border-t border-slate-200 dark:border-slate-800;
+}
+
+.study-markdown a {
+  @apply text-brand-600 dark:text-brand-400 underline underline-offset-2 hover:text-brand-700 dark:hover:text-brand-300;
+}
+

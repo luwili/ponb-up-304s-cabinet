@@ -177,7 +177,7 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div className="flex items-start space-x-3.5">
-                      <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center flex-shrink-0 text-center shadow-xs">
+                      <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center flex-shrink-0 text-center shadow-sm">
                         <span className="text-[10px] uppercase font-bold text-slate-400">Пара</span>
                         <span className="text-base font-extrabold text-brand-900 dark:text-brand-300 leading-none">
                           {p.pairNumber}

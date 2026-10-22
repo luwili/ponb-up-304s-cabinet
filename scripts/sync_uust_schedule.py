@@ -257,6 +257,211 @@ def fetch_announcements_isu(opener):
 
     return parsed_items
 
+def fetch_session_data_isu(opener):
+    """Синхронизирует экзамены, зачеты и учебный план из личного кабинета ИСУ УУНиТ."""
+    try:
+        home_html = opener.open("https://isu.uust.ru/", timeout=8).read().decode('utf-8', errors='ignore')
+        pv_m = re.search(r'href=[\"\x27](/student_points_view/(\d+)/([a-f0-9]+)/?)[\"\x27]', home_html)
+        if not pv_m:
+            print("Ссылка на успеваемость не найдена в главном меню ИСУ.")
+            return None
+
+        points_rel_url = pv_m.group(1)
+        student_id = int(pv_m.group(2))
+        student_hex = pv_m.group(3)
+
+        url_handler = 'https://isu.uust.ru/module/contingent/student_points_view_handler.php'
+        r_books = opener.open(urllib.request.Request(
+            url_handler,
+            data=json.dumps({'function': 'get_study_books_new', 'student_isu_person_id': student_id, 'hex': student_hex}).encode('utf-8'),
+            headers={'User-Agent': 'Mozilla/5.0', 'Content-Type': 'application/json'}
+        ), timeout=8)
+        books = json.loads(r_books.read().decode('utf-8'))
+        active_book = list(books.values())[0] if isinstance(books, dict) else books[0]
+
+        r_plan = opener.open(urllib.request.Request(
+            url_handler,
+            data=json.dumps({
+                'function': 'get_points_try',
+                'study_book': active_book['study_book'],
+                'ind_plan': False,
+                'student_isu_person_id': student_id,
+                'group_id': active_book['group_id'],
+                'hex': student_hex
+            }).encode('utf-8'),
+            headers={'User-Agent': 'Mozilla/5.0', 'Content-Type': 'application/json'}
+        ), timeout=8)
+        res = json.loads(r_plan.read().decode('utf-8'))
+
+        root_dir = Path(__file__).resolve().parent.parent
+        subj_path = root_dir / 'src' / 'data' / 'subjects.json'
+        sess_path = root_dir / 'src' / 'data' / 'session.json'
+
+        subjects = []
+        if subj_path.exists():
+            with open(subj_path, 'r', encoding='utf-8') as f:
+                subjects = json.load(f)
+
+        TYPE_NAMES = {
+            '3': 'Экзамен',
+            '2': 'Зачёт',
+            '10': 'РГР',
+            '6': 'Диф. зачёт',
+            '1': 'Диф. зачёт',
+            '4': 'Курсовая работа',
+            '5': 'Курсовой проект',
+            '7': 'Контрольная работа',
+            '17': 'Контрольная работа',
+            '15': 'Эссе',
+            '9': 'Реферат',
+            '16': 'ГИА'
+        }
+
+        sem5_items = res.get('plan', {}).get('5', {})
+        items = sem5_items.values() if isinstance(sem5_items, dict) else sem5_items
+
+        exams = []
+        credits_list = []
+
+        for disc in items:
+            if not isinstance(disc, dict):
+                continue
+            title = (disc.get('subject_study_book') or disc.get('subject') or '').strip()
+            if not title:
+                continue
+            credits_val = disc.get('credits', 0)
+            lec = disc.get('lec', 0)
+            prc = disc.get('prc', 0)
+            slf = disc.get('slf', 0)
+            total_hours = disc.get('summaryHoursStudied', lec + prc + slf)
+
+            matched_subj = None
+            for s in subjects:
+                s_t = s['title'].strip().lower()
+                if s_t in title.lower() or title.lower() in s_t:
+                    matched_subj = s
+                    break
+
+            teacher = matched_subj['teacherName'] if matched_subj else 'Преподаватель кафедры'
+            department = matched_subj['departmentName'] if matched_subj else 'Институт права УУНиТ'
+
+            points = disc.get('points', {})
+            if isinstance(points, dict):
+                for k, v in points.items():
+                    if isinstance(v, dict) and v.get('plan'):
+                        ctrl_type = TYPE_NAMES.get(str(k), 'Аттестация')
+                        best_mark = v.get('best_mark')
+                        mark_str = best_mark.get('point_title') if best_mark else None
+                        is_passed = bool(mark_str and 'не' not in mark_str.lower())
+                        status = f'Сдано ({mark_str})' if mark_str else 'Предстоит сдача'
+
+                        entry = {
+                            'id': f'sem5-{disc.get("discipline_id", len(exams)+len(credits_list)+1)}-{k}',
+                            'disciplineId': disc.get('discipline_id'),
+                            'subject': title,
+                            'shortSubject': matched_subj['shortTitle'] if matched_subj else title,
+                            'subjectId': matched_subj['id'] if matched_subj else None,
+                            'controlType': ctrl_type,
+                            'credits': credits_val,
+                            'hours': {
+                                'lectures': lec,
+                                'practice': prc,
+                                'self': slf,
+                                'total': total_hours
+                            },
+                            'teacher': teacher,
+                            'department': department,
+                            'status': status,
+                            'passed': is_passed,
+                            'mark': mark_str
+                        }
+                        if ctrl_type == 'Экзамен':
+                            exams.append(entry)
+                        else:
+                            credits_list.append(entry)
+
+        # All semesters overview
+        all_sems = {}
+        for s_num in sorted([k for k in res.get('plan', {}).keys() if str(k).isdigit()], key=int):
+            s_data = res['plan'][s_num]
+            s_items = s_data.values() if isinstance(s_data, dict) else s_data
+            disc_list = []
+            for d in s_items:
+                if not isinstance(d, dict):
+                    continue
+                d_title = (d.get('subject_study_book') or d.get('subject') or '').strip()
+                if not d_title:
+                    continue
+                pts = d.get('points', {})
+                ctrl_list = []
+                if isinstance(pts, dict):
+                    for pk, pv in pts.items():
+                        if isinstance(pv, dict) and pv.get('plan'):
+                            c_name = TYPE_NAMES.get(str(pk), f'Тип {pk}')
+                            bm = pv.get('best_mark')
+                            bm_title = bm.get('point_title') if bm else None
+                            ctrl_list.append({
+                                'type': c_name,
+                                'mark': bm_title,
+                                'passed': bool(bm_title and 'не' not in bm_title.lower())
+                            })
+                disc_list.append({
+                    'title': d_title,
+                    'credits': d.get('credits', 0),
+                    'controls': ctrl_list
+                })
+            all_sems[str(s_num)] = disc_list
+
+        session_data = {
+            'group': 'ПОНБ-УП-304С',
+            'specialty': '40.05.01 Правовое обеспечение национальной безопасности',
+            'specialization': 'Уголовно-правовая',
+            'studyBook': active_book.get('study_book', '25120615'),
+            'currentSemester': 5,
+            'course': 3,
+            'academicYear': '2026/2027',
+            'averageGrade': res.get('average_point', 4.09),
+            'lastSyncedAt': datetime.now(UFA_TZ).strftime('%Y-%m-%d %H:%M:%S UTC+5'),
+            'currentSession': {
+                'title': 'Зимняя экзаменационная сессия 2026/2027 (5 семестр, 3 курс)',
+                'examsCount': len(exams),
+                'creditsCount': len(credits_list),
+                'totalDisciplines': len(exams) + len(credits_list),
+                'exams': exams,
+                'credits': credits_list
+            },
+            'allSemesters': all_sems
+        }
+
+        with open(sess_path, 'w', encoding='utf-8') as f:
+            json.dump(session_data, f, ensure_ascii=False, indent=2)
+
+        # Update subjects.json examType
+        updated_any = False
+        for s in subjects:
+            s_t = s['title'].strip().lower()
+            for ex in exams:
+                if ex['subject'].strip().lower() in s_t or s_t in ex['subject'].strip().lower():
+                    if s.get('examType') != 'Экзамен':
+                        s['examType'] = 'Экзамен'
+                        updated_any = True
+            for cr in credits_list:
+                if cr['subject'].strip().lower() in s_t or s_t in cr['subject'].strip().lower():
+                    # If it was marked as Exam, but is Credit in semester 5
+                    if s.get('examType') != 'Зачёт' and not any(ex['subject'].strip().lower() in s_t for ex in exams):
+                        s['examType'] = 'Зачёт'
+                        updated_any = True
+
+        if updated_any and subjects:
+            with open(subj_path, 'w', encoding='utf-8') as f:
+                json.dump(subjects, f, ensure_ascii=False, indent=2)
+
+        print(f"Данные сессии успешно синхронизированы: {len(exams)} экзаменов, {len(credits_list)} зачётов. Сохранено в {sess_path}.")
+        return session_data
+    except Exception as e:
+        print("Ошибка синхронизации сессии из ИСУ УУНиТ:", e)
+        return None
+
 def sync_all(target_week=None, force=False):
     if target_week is None:
         target_week = calculate_current_week()
@@ -275,12 +480,14 @@ def sync_all(target_week=None, force=False):
             print(f"Авторизация в ИСУ УУНиТ под аккаунтом {login[:4]}***...")
             authenticate_isu(opener, login, password)
 
-            # Параллельный сбор расписания и объявлений
-            with ThreadPoolExecutor(max_workers=2) as ex:
+            # Параллельный сбор расписания, объявлений и сессии
+            with ThreadPoolExecutor(max_workers=3) as ex:
                 f_sched = ex.submit(fetch_schedule_isu, opener, target_week)
                 f_ann = ex.submit(fetch_announcements_isu, opener)
+                f_sess = ex.submit(fetch_session_data_isu, opener)
                 sched_entries = f_sched.result()
                 ann_entries = f_ann.result()
+                f_sess.result()
 
             print(f"Из ИСУ УУНиТ получено: {len(sched_entries)} пар, {len(ann_entries)} объявлений.")
         except Exception as e:

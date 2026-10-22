@@ -90,7 +90,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
               className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm backdrop-blur-sm border border-white/10 transition-colors"
             >
               <BookOpen className="w-4 h-4" />
-              <span>Конспекты лекций ({topicsData.length})</span>
+              <span>Конспекты ({topicsData.length})</span>
+            </button>
+
+            <button
+              onClick={() => onNavigate('exam')}
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-white font-medium text-sm backdrop-blur-sm border border-rose-400/30 transition-colors"
+            >
+              <Sparkles className="w-4 h-4 text-rose-300" />
+              <span>Сессия (4 экз. · 10 зач.)</span>
             </button>
 
             <button
@@ -445,7 +453,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
             { id: 'subjects', title: 'Предметы', desc: '10 дисциплин семестра', icon: BookOpen, color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/60' },
             { id: 'topics', title: 'Конспекты лекций', desc: '28 лекций из архива Study', icon: GraduationCap, color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60' },
             { id: 'schedule', title: 'Расписание', desc: 'Звонки и пары на неделю', icon: Calendar, color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/60' },
-            { id: 'exam', title: 'Флеш-карты', desc: 'Подготовка к экзаменам', icon: Sparkles, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },
+            { id: 'exam', title: 'Сессия и экзамены', desc: '4 экзамена, 10 зачётов ИСУ', icon: Sparkles, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },
             { id: 'teachers', title: 'Преподаватели', desc: 'Справочник института (186)', icon: Users, color: 'text-blue-600 bg-blue-50 dark:bg-blue-950/60' },
             { id: 'departments', title: 'Кафедры', desc: '8 кафедр Института права', icon: Building2, color: 'text-sky-600 bg-sky-50 dark:bg-sky-950/60' },
             { id: 'gratitude', title: 'Благодарность', desc: 'Спонсоры проекта', icon: HeartHandshake, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60' },

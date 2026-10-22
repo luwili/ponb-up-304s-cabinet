@@ -247,6 +247,8 @@ export function App() {
               onMarkKnown={handleMarkKnown}
               onMarkRepeat={handleMarkRepeat}
               onResetProgress={handleResetExamProgress}
+              onNavigateSubject={handleNavigateSubject}
+              onNavigateTopic={handleNavigateTopic}
             />
           )}
 

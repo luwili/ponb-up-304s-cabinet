@@ -12,10 +12,13 @@ import {
   BookOpen,
   Scale,
   ShieldCheck,
-  ChevronDown
+  ChevronDown,
+  Clock,
+  Sparkles
 } from 'lucide-react';
 import topicsData from '../data/topics.json';
 import subjectsData from '../data/subjects.json';
+import { MarkdownViewer } from '../components/MarkdownViewer';
 import { Topic } from '../types';
 
 interface TopicsPageProps {
@@ -196,16 +199,32 @@ export const TopicsPage: React.FC<TopicsPageProps> = ({
             <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider mb-3">
               Оглавление конспекта
             </h3>
-            <div className="space-y-1.5 text-xs">
-              {activeTopic.tableOfContents?.map((item) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  className="block p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 hover:text-brand-700 dark:hover:text-brand-300 transition-colors truncate"
-                >
-                  {item.text}
-                </a>
-              ))}
+            <div className="space-y-1 text-xs max-h-[calc(100vh-280px)] overflow-y-auto pr-1">
+              {activeTopic.tableOfContents && activeTopic.tableOfContents.length > 0 ? (
+                activeTopic.tableOfContents.map((item) => (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const target = document.getElementById(item.id);
+                      if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
+                    className={`block p-2 rounded-xl transition-all ${
+                      item.level === 3 ? 'pl-4 text-[11px]' : 'font-semibold text-xs'
+                    } text-slate-600 dark:text-slate-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 hover:text-brand-700 dark:hover:text-brand-300 truncate`}
+                    title={item.text}
+                  >
+                    {item.text}
+                  </a>
+                ))
+              ) : (
+                <div className="text-slate-400 text-xs italic py-2">
+                  Структурированное оглавление формируется по тексту
+                </div>
+              )}
             </div>
 
             {/* Legal basis box */}
@@ -235,6 +254,10 @@ export const TopicsPage: React.FC<TopicsPageProps> = ({
               <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300">
                 {activeSubject?.title || 'Юриспруденция'}
               </span>
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center space-x-1">
+                <Clock className="w-3 h-3 text-slate-400" />
+                <span>~{Math.max(5, Math.ceil(activeTopic.fullContent.length / 800))} мин чтения</span>
+              </span>
               {activeTopic.verifiedStatus && (
                 <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                   ✓ {activeTopic.verifiedStatus}
@@ -260,50 +283,24 @@ export const TopicsPage: React.FC<TopicsPageProps> = ({
 
           {/* Render content */}
           <div
-            className="print-readable prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed"
+            className="print-readable max-w-none text-slate-800 dark:text-slate-200 leading-relaxed"
             style={{ fontSize: `${fontScale}rem` }}
           >
             {viewMode === 'full' ? (
-              <div className="space-y-6">
-                {activeTopic.fullContent.split('\n\n').map((paragraph, idx) => {
-                  if (paragraph.startsWith('## ')) {
-                    const title = paragraph.replace('## ', '');
-                    const anchor = activeTopic.tableOfContents?.find((t) => t.text.includes(title.split('.')[0]))?.id;
-                    return (
-                      <h2
-                        key={idx}
-                        id={anchor}
-                        className="text-xl font-bold text-slate-900 dark:text-white pt-4 pb-2 border-b border-slate-100 dark:border-slate-800 scroll-mt-24"
-                      >
-                        {title}
-                      </h2>
-                    );
-                  }
-                  if (paragraph.startsWith('> ')) {
-                    return (
-                      <blockquote
-                        key={idx}
-                        className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border-l-4 border-amber-500 text-sm text-slate-700 dark:text-slate-300 italic"
-                      >
-                        {paragraph.replace('> ', '')}
-                      </blockquote>
-                    );
-                  }
-                  return (
-                    <p key={idx} className="text-justify leading-relaxed whitespace-pre-line">
-                      {paragraph}
-                    </p>
-                  );
-                })}
-              </div>
+              <MarkdownViewer
+                content={activeTopic.fullContent}
+                tableOfContents={activeTopic.tableOfContents}
+              />
             ) : (
-              <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-4">
-                <div className="font-bold text-amber-700 dark:text-amber-400 text-sm uppercase tracking-wider mb-2">
-                  Краткий конспект для быстрой записи и повторения
+              <div className="p-6 sm:p-8 rounded-2xl bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 shadow-sm">
+                <div className="flex items-center space-x-2 text-xs font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider mb-4 pb-3 border-b border-amber-200/50 dark:border-amber-900/40">
+                  <BookOpen className="w-4 h-4" />
+                  <span>Краткий конспект для быстрой записи и повторения</span>
                 </div>
-                <div className="whitespace-pre-line text-sm leading-relaxed">
-                  {activeTopic.shortContent}
-                </div>
+                <MarkdownViewer
+                  content={activeTopic.shortContent}
+                  tableOfContents={activeTopic.tableOfContents}
+                />
               </div>
             )}
           </div>
