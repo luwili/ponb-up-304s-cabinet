@@ -2,6 +2,8 @@
 
 Неофициальный учебный сайт студентов специальности «Правовое обеспечение национальной безопасности». React + TypeScript + Vite, статическая сборка, без регистрации, сервера, платных API и обязательных внешних шрифтов.
 
+> **Эта реализация сохранена в ветке [`verified-cabinet`](https://github.com/luwili/ponb-up-304s-cabinet/tree/verified-cabinet).** По выбору владельца в `main` оставлена параллельная другая реализация (коммит `1c91c5d`). Публичный сайт развёртывается из `main`, поэтому его текущие функции и данные могут отличаться от описанных здесь. Тесты и инструкция ниже относятся именно к этой ветке. Ветка не подменяет выбранную владельцем основную версию.
+
 ## Быстрый запуск
 
 Нужен **Node.js 24 LTS**. Откройте терминал в папке проекта:
@@ -28,7 +30,7 @@ npm run dev
 
 ## Публикация и GitHub Pages
 
-Репозиторий: **https://github.com/luwili/ponb-up-304s-cabinet**. Адрес Pages: **https://luwili.github.io/ponb-up-304s-cabinet/**. Состояние публикации и проверки: [Actions](https://github.com/luwili/ponb-up-304s-cabinet/actions/workflows/deploy.yml) и `VERIFICATION.md`.
+Репозиторий: **https://github.com/luwili/ponb-up-304s-cabinet**. Эта версия: **https://github.com/luwili/ponb-up-304s-cabinet/tree/verified-cabinet**. Адрес Pages основной версии: **https://luwili.github.io/ponb-up-304s-cabinet/**. Состояние публикации и проверки: [Actions](https://github.com/luwili/ponb-up-304s-cabinet/actions) и `VERIFICATION.md`.
 
 По официальной документации, проверенной 22.10.2026, Pages размещает статические HTML/CSS/JS. GitHub Free поддерживает Pages из публичного репозитория. Код и включённые материалы в таком репозитории будут общедоступными. Не загружайте чужие персональные данные, секреты или материалы без права распространения.
 
