@@ -24,3 +24,8 @@ test('Учебная чётность, семестр, точная дата и 
   assert.equal(lessonsOn('2026-09-07',schedule,groupSchema.parse({})).length,0);
 });
 test('Недоступное localStorage не вызывает падения',()=>assert.deepEqual(readLocal('missing',[],(v):v is string[]=>Array.isArray(v)),[]));
+test('Расписание отклоняет конфликтующие id и несовпадающую дату исключения',()=>{
+  const lesson={id:'same',subjectId:'test',date:'2026-11-02',start:'09:00',end:'10:30'};
+  assert.equal(scheduleSchema.safeParse({lessons:[lesson,lesson]}).success,false);
+  assert.equal(scheduleSchema.safeParse({exceptions:[{date:'2026-11-03',lessons:[lesson]}]}).success,false);
+});

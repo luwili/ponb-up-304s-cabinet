@@ -32,7 +32,18 @@ export const lessonSchema = z.object({
   start: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/), end: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
   kind: z.string().optional(), room: z.string().optional(), url: url.optional(), teacherId: id.optional(), note: z.string().optional()
 }).strict().refine(v => Boolean(v.date) !== Boolean(v.weekday), 'Укажите либо date, либо weekday').refine(v => v.end > v.start, 'end должен быть позже start');
-export const scheduleSchema = z.object({ lessons: z.array(lessonSchema).default([]), exceptions: z.array(z.object({ date, lessons: z.array(lessonSchema) }).strict()).default([]) }).strict();
+export const scheduleSchema = z.object({ lessons: z.array(lessonSchema).default([]), exceptions: z.array(z.object({ date, lessons: z.array(lessonSchema) }).strict()).default([]) }).strict().superRefine((value,ctx)=>{
+  if(new Set(value.lessons.map(l=>l.id)).size!==value.lessons.length)ctx.addIssue({code:'custom',path:['lessons'],message:'Повторные идентификаторы пар'});
+  const dates=new Set<string>();
+  value.exceptions.forEach((exception,i)=>{
+    if(dates.has(exception.date))ctx.addIssue({code:'custom',path:['exceptions',i,'date'],message:'Повторная дата исключения'});
+    dates.add(exception.date);
+    if(new Set(exception.lessons.map(l=>l.id)).size!==exception.lessons.length)ctx.addIssue({code:'custom',path:['exceptions',i,'lessons'],message:'Повторные идентификаторы пар'});
+    exception.lessons.forEach((lesson,j)=>{
+      if(lesson.date!==exception.date)ctx.addIssue({code:'custom',path:['exceptions',i,'lessons',j,'date'],message:'Пара исключения должна иметь ту же date, что и исключение (не weekday)'});
+    });
+  });
+});
 export const assignmentSchema = z.object({ ...base, subjectId: id, description: z.string(), dueDate: date.optional(), dueTime: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/).optional(), materialIds: z.array(id).default([]) }).strict().refine(v => !v.dueTime || v.dueDate, 'dueTime требует dueDate');
 export const announcementSchema = z.object({ ...base, body: text, publishedAt: date, expiresAt: date.optional(), pinned: z.boolean().default(false) }).strict();
 export const examSchema = z.object({ ...base, subjectId: id, answer: z.string().optional(), materialIds: z.array(id).default([]) }).strict();

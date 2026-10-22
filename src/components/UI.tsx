@@ -4,7 +4,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 export function Empty({title,children,icon:Icon=FolderOpen,compact=false}:{title:string;children?:ReactNode;icon?:LucideIcon;compact?:boolean}) {
-  return <div className={`empty ${compact?'compact':''}`}><span className="empty-icon"><Icon size={25}/></span><h3>{title}</h3>{children && <p>{children}</p>}</div>;
+  const Heading=compact?'h3':'h2';
+  return <div className={`empty ${compact?'compact':''}`}><span className="empty-icon"><Icon size={25}/></span><Heading>{title}</Heading>{children && <p>{children}</p>}</div>;
 }
 export function External({href,children,className=''}:{href:string;children:ReactNode;className?:string}) {
   return <a className={`external ${className}`} href={href} target="_blank" rel="noopener noreferrer">{children}<ArrowUpRight size={15} aria-hidden="true"/><span className="sr-only"> (внешняя ссылка, новая вкладка)</span></a>;
