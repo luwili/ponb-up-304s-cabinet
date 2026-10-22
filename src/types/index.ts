@@ -29,6 +29,17 @@ export interface Topic {
   sourceNote?: string;
 }
 
+export interface TopicMetadata {
+  id: string;
+  subjectId: string;
+  title: string;
+  order: number;
+  description: string;
+  readTimeMinutes: number;
+  verifiedStatus?: string;
+  tableOfContents?: { id: string; text: string; level: number }[];
+}
+
 export interface CaseProblem {
   id: string;
   subjectId: string;

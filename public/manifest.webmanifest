@@ -1,0 +1,19 @@
+{
+  "name": "Кабинет ПОНБ-УП-304С | Институт права УУНиТ",
+  "short_name": "ПОНБ-304С",
+  "description": "Учебный кабинет группы ПОНБ-УП-304С: расписание занятий, конспекты лекций, подготовка к экзаменам и объявления.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f2b48",
+  "theme_color": "#0f2b48",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

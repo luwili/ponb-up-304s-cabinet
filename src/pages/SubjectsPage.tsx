@@ -11,8 +11,10 @@ import {
   Sparkles
 } from 'lucide-react';
 import subjectsData from '../data/subjects.json';
-import topicsData from '../data/topics.json';
-import { Subject } from '../types';
+import topicsMetadata from '../data/topics-metadata.json';
+import { Subject, TopicMetadata } from '../types';
+
+const topicsData: TopicMetadata[] = topicsMetadata as TopicMetadata[];
 
 interface SubjectsPageProps {
   onNavigateTopic: (topicId: string) => void;
@@ -236,7 +238,7 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
                       <div className="flex-1 pr-2">
                         <div className="flex items-center space-x-2 mb-1">
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 font-bold">
-                            ~{Math.max(5, Math.ceil(t.fullContent.length / 800))} мин
+                            ~{t.readTimeMinutes || 5} мин
                           </span>
                           {t.verifiedStatus && (
                             <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">

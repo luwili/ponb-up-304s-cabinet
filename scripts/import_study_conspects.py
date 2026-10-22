@@ -392,6 +392,23 @@ def main():
     with open('src/data/topics.json', 'w', encoding='utf-8') as f:
         json.dump(out_topics, f, ensure_ascii=False, indent=2)
 
+    # Generate lightweight metadata for fast mobile loads
+    meta_topics = [
+        {
+            'id': t['id'],
+            'subjectId': t['subjectId'],
+            'title': t['title'],
+            'order': t.get('order', 1),
+            'description': t.get('description', ''),
+            'verifiedStatus': t.get('verifiedStatus', 'Материал выверен'),
+            'readTimeMinutes': max(5, int(len(t.get('fullContent', '')) / 800) + 1),
+            'tableOfContents': t.get('tableOfContents', [])
+        }
+        for t in out_topics
+    ]
+    with open('src/data/topics-metadata.json', 'w', encoding='utf-8') as f:
+        json.dump(meta_topics, f, ensure_ascii=False, indent=2)
+
     # Update subject topic counts
     with open('src/data/subjects.json', 'r', encoding='utf-8') as f:
         subjects = json.load(f)

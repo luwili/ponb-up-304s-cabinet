@@ -1,21 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
-import { SearchModal } from './components/SearchModal';
 import { SyncToast } from './components/SyncToast';
 import { triggerOneClickSync, SyncStatus } from './utils/scheduleSync';
 
+// Core pages (eager loaded for instant first paint on mobile)
 import { HomePage } from './pages/HomePage';
 import { SchedulePage } from './pages/SchedulePage';
-import { SubjectsPage } from './pages/SubjectsPage';
-import { TopicsPage } from './pages/TopicsPage';
-import { ExamPrepPage } from './pages/ExamPrepPage';
-import { TeachersPage } from './pages/TeachersPage';
-import { DepartmentsPage } from './pages/DepartmentsPage';
-import { InstitutePage } from './pages/InstitutePage';
-import { GratitudePage } from './pages/GratitudePage';
-import { FavoritesPage } from './pages/FavoritesPage';
+
+// Lazy loaded secondary pages & heavy modals
+const SubjectsPage = lazy(() => import('./pages/SubjectsPage').then(m => ({ default: m.SubjectsPage })));
+const TopicsPage = lazy(() => import('./pages/TopicsPage').then(m => ({ default: m.TopicsPage })));
+const ExamPrepPage = lazy(() => import('./pages/ExamPrepPage').then(m => ({ default: m.ExamPrepPage })));
+const TeachersPage = lazy(() => import('./pages/TeachersPage').then(m => ({ default: m.TeachersPage })));
+const DepartmentsPage = lazy(() => import('./pages/DepartmentsPage').then(m => ({ default: m.DepartmentsPage })));
+const InstitutePage = lazy(() => import('./pages/InstitutePage').then(m => ({ default: m.InstitutePage })));
+const GratitudePage = lazy(() => import('./pages/GratitudePage').then(m => ({ default: m.GratitudePage })));
+const FavoritesPage = lazy(() => import('./pages/FavoritesPage').then(m => ({ default: m.FavoritesPage })));
+const SearchModal = lazy(() => import('./components/SearchModal').then(m => ({ default: m.SearchModal })));
+
+const PageSkeleton = () => (
+  <div className="space-y-6 pb-12 animate-pulse">
+    <div className="h-32 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between">
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/4"></div>
+      <div className="h-8 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+      <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/3"></div>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="h-44 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800"></div>
+      <div className="h-44 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800"></div>
+    </div>
+  </div>
+);
 
 import { 
   getStoredItem, 
@@ -224,62 +241,64 @@ export function App() {
             />
           )}
 
-          {currentTab === 'subjects' && (
-            <SubjectsPage
-              onNavigateTopic={handleNavigateTopic}
-              onNavigateTeacher={handleNavigateTeacher}
-              selectedSubjectId={selectedSubjectId}
-            />
-          )}
+          <Suspense fallback={<PageSkeleton />}>
+            {currentTab === 'subjects' && (
+              <SubjectsPage
+                onNavigateTopic={handleNavigateTopic}
+                onNavigateTeacher={handleNavigateTeacher}
+                selectedSubjectId={selectedSubjectId}
+              />
+            )}
 
-          {currentTab === 'topics' && (
-            <TopicsPage
-              favorites={favorites}
-              onToggleFavorite={handleToggleFavorite}
-              selectedTopicId={selectedTopicId}
-            />
-          )}
+            {currentTab === 'topics' && (
+              <TopicsPage
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+                selectedTopicId={selectedTopicId}
+              />
+            )}
 
-          {currentTab === 'exam' && (
-            <ExamPrepPage
-              knownCards={knownCards}
-              repeatCards={repeatCards}
-              onMarkKnown={handleMarkKnown}
-              onMarkRepeat={handleMarkRepeat}
-              onResetProgress={handleResetExamProgress}
-              onNavigateSubject={handleNavigateSubject}
-              onNavigateTopic={handleNavigateTopic}
-            />
-          )}
+            {currentTab === 'exam' && (
+              <ExamPrepPage
+                knownCards={knownCards}
+                repeatCards={repeatCards}
+                onMarkKnown={handleMarkKnown}
+                onMarkRepeat={handleMarkRepeat}
+                onResetProgress={handleResetExamProgress}
+                onNavigateSubject={handleNavigateSubject}
+                onNavigateTopic={handleNavigateTopic}
+              />
+            )}
 
-          {currentTab === 'teachers' && (
-            <TeachersPage
-              initialSearch={teacherSearchQuery}
-              onNavigateSubject={handleNavigateSubject}
-            />
-          )}
+            {currentTab === 'teachers' && (
+              <TeachersPage
+                initialSearch={teacherSearchQuery}
+                onNavigateSubject={handleNavigateSubject}
+              />
+            )}
 
-          {currentTab === 'departments' && (
-            <DepartmentsPage
-              onSelectDepartment={handleSelectDepartment}
-            />
-          )}
+            {currentTab === 'departments' && (
+              <DepartmentsPage
+                onSelectDepartment={handleSelectDepartment}
+              />
+            )}
 
-          {currentTab === 'institute' && (
-            <InstitutePage />
-          )}
+            {currentTab === 'institute' && (
+              <InstitutePage />
+            )}
 
-          {currentTab === 'gratitude' && (
-            <GratitudePage />
-          )}
+            {currentTab === 'gratitude' && (
+              <GratitudePage />
+            )}
 
-          {currentTab === 'favorites' && (
-            <FavoritesPage
-              favorites={favorites}
-              onToggleFavorite={handleToggleFavorite}
-              onNavigateTopic={handleNavigateTopic}
-            />
-          )}
+            {currentTab === 'favorites' && (
+              <FavoritesPage
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+                onNavigateTopic={handleNavigateTopic}
+              />
+            )}
+          </Suspense>
         </main>
       </div>
 
@@ -323,12 +342,16 @@ export function App() {
         onOpenMobileMenu={() => setMobileMenuOpen(true)}
       />
 
-      {/* Search Modal */}
-      <SearchModal
-        isOpen={searchModalOpen}
-        onClose={() => setSearchModalOpen(false)}
-        onNavigate={handleGlobalNavigate}
-      />
+      {/* Search Modal (loaded on demand) */}
+      {searchModalOpen && (
+        <Suspense fallback={null}>
+          <SearchModal
+            isOpen={searchModalOpen}
+            onClose={() => setSearchModalOpen(false)}
+            onNavigate={handleGlobalNavigate}
+          />
+        </Suspense>
+      )}
 
       {/* Sync Notification Toast */}
       <SyncToast

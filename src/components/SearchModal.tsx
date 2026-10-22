@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, X, BookOpen, FileText, Users, Building2, ArrowRight } from 'lucide-react';
 import subjectsData from '../data/subjects.json';
-import topicsData from '../data/topics.json';
+import topicsMetadata from '../data/topics-metadata.json';
 import teachersData from '../data/teachers.json';
 import departmentsData from '../data/departments.json';
+import { TopicMetadata } from '../types';
+
+const topicsData: TopicMetadata[] = topicsMetadata as TopicMetadata[];
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -80,11 +83,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     // 2. Topics & Notes
     if (filterType === 'all' || filterType === 'topics') {
       topicsData.forEach((t) => {
+        const matchToc = t.tableOfContents?.some((item) => normalize(item.text).includes(q));
         if (
           normalize(t.title).includes(q) ||
           normalize(t.description).includes(q) ||
-          normalize(t.shortContent).includes(q) ||
-          normalize(t.fullContent).includes(q)
+          matchToc
         ) {
           list.push({
             id: `top-${t.id}`,

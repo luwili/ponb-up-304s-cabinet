@@ -1,7 +1,10 @@
 import React from 'react';
 import { Bookmark, FileText, Trash2, ArrowRight } from 'lucide-react';
-import topicsData from '../data/topics.json';
+import topicsMetadata from '../data/topics-metadata.json';
 import subjectsData from '../data/subjects.json';
+import { TopicMetadata } from '../types';
+
+const topicsData: TopicMetadata[] = topicsMetadata as TopicMetadata[];
 
 interface FavoritesPageProps {
   favorites: string[];

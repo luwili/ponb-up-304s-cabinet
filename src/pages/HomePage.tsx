@@ -20,12 +20,13 @@ import {
 } from 'lucide-react';
 import scheduleData from '../data/schedule.json';
 import rawAnnouncements from '../data/announcements.json';
-import topicsData from '../data/topics.json';
+import topicsMetadata from '../data/topics-metadata.json';
 import subjectsData from '../data/subjects.json';
 import { getUfaTimeInfo } from '../utils/time';
-import { Announcement } from '../types';
+import { Announcement, TopicMetadata } from '../types';
 
 const announcementsData: Announcement[] = rawAnnouncements as unknown as Announcement[];
+const topicsData: TopicMetadata[] = topicsMetadata as TopicMetadata[];
 
 interface HomePageProps {
   onNavigate: (tab: string, itemId?: string) => void;
@@ -255,7 +256,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
             <div className="space-y-3">
               {featuredTopics.map((topic) => {
                 const sub = subjectsData.find((s) => s.id === topic.subjectId);
-                const readTime = Math.max(5, Math.ceil(topic.fullContent.length / 800));
+                const readTime = topic.readTimeMinutes || 5;
                 return (
                   <div
                     key={topic.id}
