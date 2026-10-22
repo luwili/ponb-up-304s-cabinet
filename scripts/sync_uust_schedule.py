@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
 """
-Скрипт синхронизации расписания группы ПОНБ-УП-304С
+Скрипт автоматической синхронизации расписания группы ПОНБ-УП-304С
 с официальным API расписания УУНиТ / ИСУ (dev.uust-time.ru / schedule.uust.ru).
 
 ID группы ПОНБ-УП-304С: 13799
 ID семестра: 241 (Осенний семестр 2026/2027)
+Часовой пояс: Уфа (UTC+5 / Asia/Yekaterinburg)
 """
 
 import sys
 import json
 import ssl
 import urllib.request
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 GROUP_ID = 13799
 SEMESTER_ID = 241
 SEMESTER_START = datetime(2026, 9, 1)
+UFA_TZ = timezone(timedelta(hours=5))
 
-# Сопоставление названий предметов с subjectId
 SUBJECT_MAP = {
     'Основы финансовой грамотности': 'fin-gramotnost',
     'Специальная профессиональная подготовка': 'spec-podgotovka',
@@ -50,9 +51,19 @@ BELL_SCHEDULE = [
 ]
 
 def calculate_current_week():
-    monday_start = SEMESTER_START - timedelta(days=SEMESTER_START.weekday())
-    now = datetime.now()
-    diff_days = (now - monday_start).days
+    now_ufa = datetime.now(UFA_TZ)
+    monday_start = SEMESTER_START.replace(tzinfo=UFA_TZ) - timedelta(days=SEMESTER_START.weekday())
+    
+    # Если воскресенье после 12:00, готовим расписание на следующую неделю
+    if now_ufa.weekday() == 6 and now_ufa.hour >= 12:
+        target_date = now_ufa + timedelta(days=1)
+    else:
+        target_date = now_ufa
+        
+    current_monday = target_date - timedelta(days=target_date.weekday())
+    current_monday = current_monday.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    diff_days = (current_monday - monday_start).days
     return max(1, diff_days // 7 + 1)
 
 def fetch_schedule_from_isu(group_id=GROUP_ID, semester_id=SEMESTER_ID):
@@ -62,25 +73,24 @@ def fetch_schedule_from_isu(group_id=GROUP_ID, semester_id=SEMESTER_ID):
     ctx.verify_mode = ssl.CERT_NONE
     
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (CabinetSync/1.0)"})
-    with urllib.request.urlopen(req, timeout=10, context=ctx) as r:
+    with urllib.request.urlopen(req, timeout=15, context=ctx) as r:
         if r.status != 200:
             raise RuntimeError(f"HTTP {r.status} while fetching schedule")
         return json.loads(r.read().decode('utf-8'))
 
-def sync_schedule(target_week=None):
+def sync_schedule(target_week=None, force=False):
     if target_week is None:
         target_week = calculate_current_week()
     
-    print(f"Синхронизация расписания УУНиТ для недели {target_week}...")
-    api_entries = fetch_schedule_from_isu()
+    now_ufa = datetime.now(UFA_TZ)
+    print(f"[{now_ufa.strftime('%Y-%m-%d %H:%M:%S')} UTC+5] Проверка расписания УУНиТ для недели {target_week}...")
     
-    # Фильтрация по неделе
+    api_entries = fetch_schedule_from_isu()
     week_str = str(target_week)
     filtered = [e for e in api_entries if week_str in e.get('schedule_weeks', [])]
-    print(f"Найдено занятий в API для недели {target_week}: {len(filtered)}")
+    print(f"Найдено занятий в базе ИСУ для недели {target_week}: {len(filtered)}")
     
-    # Вычисление дат недели
-    monday_start = SEMESTER_START - timedelta(days=SEMESTER_START.weekday())
+    monday_start = SEMESTER_START.replace(tzinfo=UFA_TZ) - timedelta(days=SEMESTER_START.weekday())
     week_monday = monday_start + timedelta(weeks=target_week - 1)
     
     days_data = []
@@ -101,13 +111,18 @@ def sync_schedule(target_week=None):
             
             building = entry.get('building_short_title', '')
             room = entry.get('room_title', '')
-            room_str = f"каб. {room} (Достоевского 131)" if room and '313' in room or '103' in room or '207' in room or '315' in room or '401' in room or '405' in room or '107' in room else (f"{building}-{room}".strip('-') if room else "Уточняется")
-            if 'Уточняется' in room_str or not room:
-                room_str = "Спорткомплекс УУНиТ (Уточняется)" if 'физическая' in subj_title.lower() else "Институт права"
+            if room and any(k in room for k in ['313', '103', '207', '315', '401', '405', '107']):
+                room_str = f"каб. {room} (Достоевского 131)"
+            elif room:
+                room_str = f"{building}-{room}".strip('-')
+            elif 'физическая' in subj_title.lower():
+                room_str = "Спорткомплекс УУНиТ (Уточняется)"
+            else:
+                room_str = "Институт права"
             
-            teacher = entry.get('teacher_fullname', entry.get('teacher', 'Преподаватель кафедры'))
+            teacher = entry.get('teacher_fullname', entry.get('teacher', 'Преподаватель кафедры')).strip()
             if 'Нурмухаметов' in teacher:
-                teacher = f"{teacher.strip()} (Куратор)"
+                teacher = f"{teacher} (Куратор)"
             
             pairs.append({
                 "id": f"sch-{day_id}-{idx}",
@@ -117,7 +132,7 @@ def sync_schedule(target_week=None):
                 "subjectId": subj_id,
                 "subjectName": subj_title,
                 "type": entry.get('type', 'Практика (семинар)'),
-                "teacher": teacher.strip(),
+                "teacher": teacher,
                 "room": room_str,
                 "notes": entry.get('comment') or f"Занятие по расписанию ({entry.get('type', '')})"
             })
@@ -130,24 +145,46 @@ def sync_schedule(target_week=None):
         })
     
     out_path = Path(__file__).resolve().parent.parent / 'src' / 'data' / 'schedule.json'
-    schedule_doc = {
-        "group": "ПОНБ-УП-304С",
-        "semester": "Осенний семестр 2026/2027",
-        "timezone": "Asia/Yekaterinburg",
-        "currentWeekNumber": target_week,
-        "weekType": "even" if target_week % 2 == 0 else "odd",
-        "building": "Институт права (ул. Достоевского, 131)",
-        "bellSchedule": BELL_SCHEDULE,
-        "days": days_data
-    }
     
-    with open(out_path, 'w', encoding='utf-8') as f:
-        json.dump(schedule_doc, f, ensure_ascii=False, indent=2)
+    # Сравниваем с текущим файлом
+    has_changes = True
+    if out_path.exists() and not force:
+        try:
+            with open(out_path, 'r', encoding='utf-8') as f:
+                old_data = json.load(f)
+            if old_data.get('currentWeekNumber') == target_week and old_data.get('days') == days_data:
+                has_changes = False
+                print("Изменений в расписании не обнаружено. Данные актуальны.")
+        except Exception as e:
+            print("Ошибка при чтении текущего файла расписания:", e)
     
-    print(f"Расписание успешно синхронизировано и сохранено в {out_path}!")
-    for d in days_data:
-        print(f"  {d['dayName']} ({d['date']}): {len(d['pairs'])} пар")
+    if has_changes or force:
+        schedule_doc = {
+            "group": "ПОНБ-УП-304С",
+            "semester": "Осенний семестр 2026/2027",
+            "timezone": "Asia/Yekaterinburg",
+            "currentWeekNumber": target_week,
+            "weekType": "even" if target_week % 2 == 0 else "odd",
+            "building": "Институт права (ул. Достоевского, 131)",
+            "lastSyncedAt": now_ufa.strftime('%Y-%m-%d %H:%M:%S UTC+5'),
+            "bellSchedule": BELL_SCHEDULE,
+            "days": days_data
+        }
+        with open(out_path, 'w', encoding='utf-8') as f:
+            json.dump(schedule_doc, f, ensure_ascii=False, indent=2)
+        print(f"Расписание обновлено и сохранено в {out_path}!")
+        for d in days_data:
+            print(f"  {d['dayName']} ({d['date']}): {len(d['pairs'])} пар")
+        return True
+    
+    return False
 
 if __name__ == '__main__':
-    target = int(sys.argv[1]) if len(sys.argv) > 1 else None
-    sync_schedule(target)
+    target = None
+    force = False
+    for arg in sys.argv[1:]:
+        if arg in ('--force', '-f'):
+            force = True
+        elif arg.isdigit():
+            target = int(arg)
+    sync_schedule(target, force=force)

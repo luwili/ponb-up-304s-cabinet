@@ -37,10 +37,18 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div>
-          <div className="flex items-center space-x-2 text-xs font-semibold text-brand-700 dark:text-brand-400 uppercase tracking-wider mb-1">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-brand-700 dark:text-brand-400 uppercase tracking-wider mb-1">
             <span>Институт права УУНиТ · Уфа</span>
             <span>•</span>
-            <span>Неделя 8 (Четная)</span>
+            <span>Неделя {scheduleData.currentWeekNumber} ({scheduleData.weekType === 'even' ? 'Четная' : 'Нечетная'})</span>
+            {(scheduleData as any).lastSyncedAt && (
+              <>
+                <span>•</span>
+                <span className="text-emerald-600 dark:text-emerald-400 normal-case font-medium">
+                  ИСУ УУНиТ: {(scheduleData as any).lastSyncedAt}
+                </span>
+              </>
+            )}
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Расписание занятий ПОНБ-УП-304С
