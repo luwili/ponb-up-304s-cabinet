@@ -1,5 +1,5 @@
 // Study Room Service Worker (Mobile PWA & Offline Cache)
-const CACHE_NAME = 'study-room-v2';
+const CACHE_NAME = 'study-room-v3';
 
 // Essential static assets to cache on install
 const PRECACHE_ASSETS = [
