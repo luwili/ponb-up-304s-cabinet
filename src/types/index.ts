@@ -61,12 +61,55 @@ export interface ScheduleItem {
   timeEnd: string;
   subjectId: string;
   subjectName: string;
-  type: 'Практика (семинар)' | 'Лекция' | 'Консультация' | 'Зачёт/Экзамен';
+  type: string;
   teacher: string;
   room: string;
   building?: string;
+  notes?: string;
   note?: string;
   weekType?: 'even' | 'odd' | 'all';
+}
+
+export interface ScheduleDay {
+  dayOfWeek: number;
+  dayName: string;
+  date: string;
+  pairs: ScheduleItem[];
+}
+
+export interface ScheduleWeek {
+  weekNumber: number;
+  weekType: 'even' | 'odd';
+  startDate: string;
+  endDate: string;
+  label: string;
+  totalPairs: number;
+  days: ScheduleDay[];
+}
+
+export interface BellScheduleItem {
+  pair: number;
+  shift?: number;
+  shiftPair?: number;
+  label: string;
+  timeStart: string;
+  timeEnd: string;
+  break?: string;
+}
+
+export interface ScheduleDoc {
+  group: string;
+  semester: string;
+  timezone: string;
+  currentWeekNumber: number;
+  weekType: 'even' | 'odd';
+  building: string;
+  lastSyncedAt: string;
+  totalSemesterPairs?: number;
+  totalSemesterWeeks?: number;
+  bellSchedule: BellScheduleItem[];
+  days: ScheduleDay[];
+  weeks?: Record<string, ScheduleWeek>;
 }
 
 export interface Assignment {

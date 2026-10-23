@@ -64,6 +64,7 @@ export function App() {
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | undefined>(undefined);
   const [selectedTopicId, setSelectedTopicId] = useState<string | undefined>(undefined);
   const [teacherSearchQuery, setTeacherSearchQuery] = useState<string>('');
+  const [scheduleTargetWeek, setScheduleTargetWeek] = useState<number | undefined>(undefined);
 
   // Modals & Drawers
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -195,6 +196,7 @@ export function App() {
     if (tab === 'topics' && itemId) setSelectedTopicId(itemId);
     if (tab === 'subjects' && itemId) setSelectedSubjectId(itemId);
     if (tab === 'teachers' && itemId) setTeacherSearchQuery('');
+    if (tab === 'schedule' && itemId) setScheduleTargetWeek(Number(itemId));
     handleSelectTab(tab);
   };
 
@@ -226,7 +228,7 @@ export function App() {
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-5xl w-full overflow-hidden">
           {currentTab === 'home' && (
             <HomePage 
-              onNavigate={handleSelectTab} 
+              onNavigate={handleGlobalNavigate} 
               onOpenSync={handleStartOneClickSync}
               isSyncing={isSyncing}
             />
@@ -234,6 +236,7 @@ export function App() {
 
           {currentTab === 'schedule' && (
             <SchedulePage
+              initialWeek={scheduleTargetWeek}
               onNavigateTeacher={handleNavigateTeacher}
               onNavigateSubject={handleNavigateSubject}
               onOpenSync={handleStartOneClickSync}

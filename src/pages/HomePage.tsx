@@ -133,7 +133,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
                     Расписание: {todaySchedule.dayName}
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Неделя 8 · {timeInfo.dateString}
+                    Неделя {(scheduleData as any).currentWeekNumber || 8} · {timeInfo.dateString}
                   </p>
                 </div>
               </div>
@@ -214,6 +214,25 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
                   </div>
                 );
               })}
+            </div>
+
+            {/* Quick jump to upcoming weeks */}
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Следующие 2 недели:</span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  onClick={() => onNavigate('schedule', '9')}
+                  className="px-2.5 py-1 rounded-lg font-semibold bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/80 hover:bg-amber-200 dark:hover:bg-amber-900/80 transition-colors"
+                >
+                  Неделя 9 (26.10–01.11) →
+                </button>
+                <button
+                  onClick={() => onNavigate('schedule', '10')}
+                  className="px-2.5 py-1 rounded-lg font-semibold bg-indigo-100 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-700/80 hover:bg-indigo-200 dark:hover:bg-indigo-900/80 transition-colors"
+                >
+                  Неделя 10 (02–08.11) →
+                </button>
+              </div>
             </div>
           </div>
 

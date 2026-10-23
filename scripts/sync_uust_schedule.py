@@ -33,11 +33,13 @@ SUBJECT_MAP = {
     'Финансовое право': 'fin-pravo',
     'Гражданское право (часть 2)': 'grazhd-pravo-2',
     'Уголовно-процессуальное право (уголовный процесс)': 'ugolov-proc',
-    'Административный судебный процесс': 'admin-sud-proc',
-    'Общая физическая подготовка': 'fizra',
+    'Административный судебный процесс': 'admin-proc',
+    'Общая физическая подготовка': 'ofp',
     'Экологическое право': 'eco-pravo',
     'Уголовное право (особенная часть)': 'ugolov-pravo-osob',
     'Гражданское процессуальное право (гражданский процесс)': 'grazhd-proc',
+    'Международное право': 'int-pravo',
+    'Экономические основы бизнеса': 'econ-biz',
 }
 
 WEEKDAYS = [
@@ -527,98 +529,42 @@ def fetch_session_data_isu(opener):
         print("Ошибка синхронизации сессии из ИСУ УУНиТ:", e)
         return None
 
-def sync_all(target_week=None, force=False):
-    if target_week is None:
-        target_week = calculate_current_week()
+def format_room(raw_room, subj_title):
+    if not raw_room:
+        return "Институт права"
+    if 'физическая' in subj_title.lower() or 'уточняется' in raw_room.lower() or 'спорт' in raw_room.lower():
+        return "Спорткомплекс УУНиТ (ул. Заки Валиди, 32 / Уточняется)"
+    if 'актовый зал' in raw_room.lower():
+        return "Актовый зал (Достоевского 131)"
+    m = re.search(r'-\s*([0-9]{2,4}[а-яА-Я]?)\b', raw_room)
+    if m:
+        return f"каб. {m.group(1)} (Достоевского 131)"
+    m2 = re.findall(r'\b(\d{3}[а-яА-Я]?)\b', raw_room)
+    rooms = [r for r in m2 if r != '131']
+    if rooms:
+        return f"каб. {rooms[-1]} (Достоевского 131)"
+    return raw_room
 
-    now_ufa = datetime.now(UFA_TZ)
-    print(f"[{now_ufa.strftime('%Y-%m-%d %H:%M:%S')} UTC+5] Синхронизация расписания и объявлений для недели {target_week}...")
-
-    login, password = get_credentials()
-    opener = create_opener()
-
-    sched_entries = []
-    ann_entries = []
-
-    if login and password:
-        try:
-            print(f"Авторизация в ИСУ УУНиТ под аккаунтом {login[:4]}***...")
-            authenticate_isu(opener, login, password)
-
-            # Параллельный сбор расписания, объявлений и сессии
-            with ThreadPoolExecutor(max_workers=3) as ex:
-                f_sched = ex.submit(fetch_schedule_isu, opener, target_week)
-                f_ann = ex.submit(fetch_announcements_isu, opener)
-                f_sess = ex.submit(fetch_session_data_isu, opener)
-                sched_entries = f_sched.result()
-                ann_entries = f_ann.result()
-                f_sess.result()
-
-            print(f"Из ИСУ УУНиТ получено: {len(sched_entries)} пар, {len(ann_entries)} объявлений.")
-        except Exception as e:
-            print("Ошибка при параллельном запросе к ИСУ УУНиТ:", e)
-
-    # Резервный источник расписания при сбое авторизации
-    if not sched_entries:
-        try:
-            print("Запрос расписания через резервный открытый API dev.uust-time.ru...")
-            url = f"https://dev.uust-time.ru/api/v/852972/schedule/0/{GROUP_ID}/semester/{SEMESTER_ID}?site=schedule"
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=8, context=ctx) as r:
-                data = json.loads(r.read().decode('utf-8'))
-            
-            week_str = str(target_week)
-            for e in [x for x in data if week_str in x.get('schedule_weeks', [])]:
-                p_num = e.get('schedule_time_num', 1)
-                t_start, t_end = PAIR_TIMES.get(p_num, ("08:00", "09:20"))
-                bld = e.get('building_short_title', '')
-                rm = e.get('room_title', '')
-                sched_entries.append({
-                    'day': e.get('schedule_weekday_id'),
-                    'pair': p_num,
-                    'timeStart': t_start,
-                    'timeEnd': t_end,
-                    'subject': e.get('schedule_subject_title', ''),
-                    'type': e.get('type', 'Практика (семинар)'),
-                    'teacher': e.get('teacher_fullname', '').strip(),
-                    'room': f"{bld} - {rm}".strip('- ') if rm else 'Институт права'
-                })
-        except Exception as e2:
-            print("Ошибка резервного API расписания:", e2)
-
-    # 1. Формирование расписания
-    monday_start = SEMESTER_START.replace(tzinfo=UFA_TZ) - timedelta(days=SEMESTER_START.weekday())
-    week_monday = monday_start + timedelta(weeks=target_week - 1)
-
+def build_week_days(w, entries, monday_start):
+    week_monday = monday_start + timedelta(weeks=w - 1)
     days_data = []
     for day_id, day_name in WEEKDAYS:
         day_date = week_monday + timedelta(days=day_id - 1)
-        day_entries = [e for e in sched_entries if e['day'] == day_id]
+        day_entries = [e for e in entries if e['day'] == day_id]
         day_entries.sort(key=lambda x: x['pair'])
 
         pairs = []
         for idx, entry in enumerate(day_entries, start=1):
             subj_title = entry['subject']
             subj_id = SUBJECT_MAP.get(subj_title, 'other')
-            
-            raw_room = entry['room']
-            if any(k in raw_room for k in ['313', '103', '207', '315', '401', '405', '107']):
-                room_num = re.search(r'\b(313|103|207|315|401|405|107)\b', raw_room)
-                room_str = f"каб. {room_num.group(1)} (Достоевского 131)" if room_num else raw_room
-            elif 'физическая' in subj_title.lower():
-                room_str = "Спорткомплекс УУНиТ (Уточняется)"
-            else:
-                room_str = raw_room or "Институт права"
+            room_str = format_room(entry['room'], subj_title)
 
             teacher = entry['teacher']
             if 'Нурмухаметов' in teacher:
                 teacher = f"{teacher} (Куратор)"
 
             pairs.append({
-                "id": f"sch-{day_id}-{idx}",
+                "id": f"sch-w{w}-{day_id}-{idx}",
                 "pairNumber": entry['pair'],
                 "timeStart": entry['timeStart'],
                 "timeEnd": entry['timeEnd'],
@@ -636,13 +582,116 @@ def sync_all(target_week=None, force=False):
             "date": day_date.strftime("%Y-%m-%d"),
             "pairs": pairs
         })
+    return days_data
+
+def fetch_all_weeks_dev(group_id, semester_id):
+    try:
+        url = f"https://dev.uust-time.ru/api/v/852972/schedule/0/{group_id}/semester/{semester_id}?site=schedule"
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=8, context=ctx) as r:
+            data = json.loads(r.read().decode('utf-8'))
+        weeks_map = {w: [] for w in range(1, 18)}
+        for e in data:
+            p_num = e.get('schedule_time_num', 1)
+            t_start, t_end = PAIR_TIMES.get(p_num, ("08:00", "09:20"))
+            bld = e.get('building_short_title', '')
+            rm = e.get('room_title', '')
+            entry = {
+                'day': e.get('schedule_weekday_id'),
+                'pair': p_num,
+                'timeStart': t_start,
+                'timeEnd': t_end,
+                'subject': e.get('schedule_subject_title', ''),
+                'type': e.get('type', 'Практика (семинар)'),
+                'teacher': e.get('teacher_fullname', '').strip(),
+                'room': f"{bld} - {rm}".strip('- ') if rm else 'Институт права'
+            }
+            for w_str in e.get('schedule_weeks', []):
+                if str(w_str).isdigit():
+                    wn = int(w_str)
+                    if 1 <= wn <= 17:
+                        weeks_map[wn].append(entry)
+        return weeks_map
+    except Exception as e:
+        print("Ошибка резервного API расписания:", e)
+        return {}
+
+def sync_all(target_week=None, force=False):
+    if target_week is None:
+        target_week = calculate_current_week()
+
+    now_ufa = datetime.now(UFA_TZ)
+    print(f"[{now_ufa.strftime('%Y-%m-%d %H:%M:%S')} UTC+5] Синхронизация расписания (все 17 недель) и объявлений для недели {target_week}...")
+
+    login, password = get_credentials()
+    opener = create_opener()
+
+    all_weeks_raw = {}
+    ann_entries = []
+
+    if login and password:
+        try:
+            print(f"Авторизация в ИСУ УУНиТ под аккаунтом {login[:4]}***...")
+            authenticate_isu(opener, login, password)
+
+            # Параллельный сбор расписания всех 17 недель, объявлений и сессии
+            with ThreadPoolExecutor(max_workers=8) as ex:
+                f_ann = ex.submit(fetch_announcements_isu, opener)
+                f_sess = ex.submit(fetch_session_data_isu, opener)
+                week_futs = {w: ex.submit(fetch_schedule_isu, opener, w) for w in range(1, 18)}
+                ann_entries = f_ann.result()
+                f_sess.result()
+                for w, fut in week_futs.items():
+                    all_weeks_raw[w] = fut.result()
+
+            total_isu_pairs = sum(len(p) for p in all_weeks_raw.values())
+            print(f"Из ИСУ УУНиТ получено: {total_isu_pairs} пар суммарно на 17 недель, {len(ann_entries)} объявлений.")
+        except Exception as e:
+            print("Ошибка при параллельном запросе к ИСУ УУНиТ:", e)
+
+    # Резервный источник расписания при сбое авторизации
+    if not any(all_weeks_raw.values()):
+        print("Запрос расписания через резервный открытый API dev.uust-time.ru...")
+        all_weeks_raw = fetch_all_weeks_dev(GROUP_ID, SEMESTER_ID)
+
+    # 1. Формирование расписания на весь семестр и на выбранную неделю
+    monday_start = SEMESTER_START.replace(tzinfo=UFA_TZ) - timedelta(days=SEMESTER_START.weekday())
+    weeks_dict = {}
+    total_semester_pairs = 0
+
+    for w in range(1, 18):
+        week_monday = monday_start + timedelta(weeks=w - 1)
+        week_sunday = week_monday + timedelta(days=6)
+        entries = all_weeks_raw.get(w, [])
+        w_days = build_week_days(w, entries, monday_start)
+        w_pairs_count = sum(len(d['pairs']) for d in w_days)
+        total_semester_pairs += w_pairs_count
+
+        weeks_dict[str(w)] = {
+            "weekNumber": w,
+            "weekType": "even" if w % 2 == 0 else "odd",
+            "startDate": week_monday.strftime("%Y-%m-%d"),
+            "endDate": week_sunday.strftime("%Y-%m-%d"),
+            "label": f"{week_monday.strftime('%d.%m')} – {week_sunday.strftime('%d.%m')}",
+            "totalPairs": w_pairs_count,
+            "days": w_days
+        }
+
+    target_week_key = str(target_week)
+    if target_week_key in weeks_dict:
+        days_data = weeks_dict[target_week_key]["days"]
+    else:
+        days_data = weeks_dict.get("8", {}).get("days", [])
 
     root_dir = Path(__file__).resolve().parent.parent
     sched_path = root_dir / 'src' / 'data' / 'schedule.json'
     ann_path = root_dir / 'src' / 'data' / 'announcements.json'
 
     # Сохранение расписания
-    if sched_entries or force:
+    if total_semester_pairs > 0 or force:
         saved_bell_sched = BELL_SCHEDULE
         if sched_path.exists():
             try:
@@ -661,12 +710,15 @@ def sync_all(target_week=None, force=False):
             "weekType": "even" if target_week % 2 == 0 else "odd",
             "building": "Институт права (ул. Достоевского, 131)",
             "lastSyncedAt": now_ufa.strftime('%Y-%m-%d %H:%M:%S UTC+5'),
+            "totalSemesterPairs": total_semester_pairs,
+            "totalSemesterWeeks": 17,
             "bellSchedule": saved_bell_sched,
+            "weeks": weeks_dict,
             "days": days_data
         }
         with open(sched_path, 'w', encoding='utf-8') as f:
             json.dump(doc_sched, f, ensure_ascii=False, indent=2)
-        print(f"Расписание сохранено в {sched_path}.")
+        print(f"Расписание ({total_semester_pairs} пар на 17 недель) сохранено в {sched_path}.")
 
     # 2. Формирование и слияние объявлений
     base_defaults = [
