@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.StudyRoomWidget" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/amber_primary</item>
-        <item name="android:windowBackground">@color/bg_dark</item>
-        <item name="android:statusBarColor">@color/bg_dark</item>
+        <item name="colorPrimary">@color/accent_primary</item>
+        <item name="android:windowBackground">@color/widget_bg</item>
+        <item name="android:statusBarColor">@color/widget_bg</item>
+        <item name="fontFamily">@font/anthropic_serif</item>
+        <item name="android:fontFamily">@font/anthropic_serif</item>
     </style>
 </resources>

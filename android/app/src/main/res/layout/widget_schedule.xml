@@ -36,6 +36,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/anthropic_serif"
                     android:text="@string/group_name"
                     android:textColor="@color/text_primary"
                     android:textSize="14sp"
@@ -51,6 +52,10 @@
                     android:paddingTop="1dp"
                     android:paddingEnd="6dp"
                     android:paddingBottom="1dp"
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:ellipsize="none"
+                    android:fontFamily="@font/anthropic_serif"
                     android:text="Неделя 8"
                     android:textColor="@color/accent_primary"
                     android:textSize="10sp"

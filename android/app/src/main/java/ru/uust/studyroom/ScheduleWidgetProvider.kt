@@ -30,23 +30,27 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             val schedule = ScheduleRepository.getTodaySchedule(context)
 
             val remoteViews = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                // Android 12+ Responsive Layouts
-                val compactView = buildCompactViews(context, appWidgetId, schedule)
+                // Responsive Layouts (API 31+)
+                val compactRows = buildCompactRowsViews(context, appWidgetId, schedule)
+                val columnsView = buildColumnsViews(context, appWidgetId, schedule)
                 val expandedView = buildExpandedViews(context, appWidgetId, schedule)
+
                 val viewMapping = mapOf(
-                    SizeF(120f, 60f) to compactView,
-                    SizeF(240f, 150f) to expandedView
+                    SizeF(100f, 50f) to compactRows,
+                    SizeF(170f, 60f) to columnsView,
+                    SizeF(240f, 170f) to expandedView
                 )
                 RemoteViews(viewMapping)
             } else {
-                // Android < 12 size detection
+                // Pre-Android 12 size detection
                 val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-                val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 280)
-                val height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 180)
-                if (height < 140 || width < 230) {
-                    buildCompactViews(context, appWidgetId, schedule)
-                } else {
-                    buildExpandedViews(context, appWidgetId, schedule)
+                val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 260)
+                val height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 140)
+
+                when {
+                    height >= 170 && width >= 240 -> buildExpandedViews(context, appWidgetId, schedule)
+                    width >= 170 -> buildColumnsViews(context, appWidgetId, schedule)
+                    else -> buildCompactRowsViews(context, appWidgetId, schedule)
                 }
             }
 
@@ -54,49 +58,135 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_pairs)
         }
 
-        private fun buildCompactViews(
+        /**
+         * Horizontal Columns Layout (for 4x1, 4x2, 3x2, wide widgets).
+         * Direct binding without asynchronous ListView ensures 100% reliability and zero empty boxes.
+         */
+        private fun buildColumnsViews(
             context: Context,
             appWidgetId: Int,
             schedule: DaySchedule
         ): RemoteViews {
-            val views = RemoteViews(context.packageName, R.layout.widget_schedule_compact)
+            val views = RemoteViews(context.packageName, R.layout.widget_schedule_columns)
 
-            views.setTextViewText(R.id.tv_week_badge, "Нед. ${schedule.weekNumber}")
+            // Header date without squishing "Неделя"
             val headerDate = if (schedule.isToday) {
                 schedule.dayName
             } else {
                 "Завтра (${schedule.dayName})"
             }
-            views.setTextViewText(R.id.tv_header_date, headerDate)
+            views.setTextViewText(R.id.tv_header_date, "· $headerDate")
 
-            // Adapter Intent with is_compact=true
-            val serviceIntent = Intent(context, ScheduleWidgetService::class.java).apply {
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                putExtra("is_compact", true)
-                data = Uri.parse("ru.uust.studyroom://widget/$appWidgetId/compact")
-            }
-            views.setRemoteAdapter(R.id.list_pairs, serviceIntent)
-            views.setEmptyView(R.id.list_pairs, R.id.layout_empty)
-
+            // Empty state
             if (schedule.pairs.isEmpty()) {
                 views.setViewVisibility(R.id.layout_empty, View.VISIBLE)
-                views.setViewVisibility(R.id.list_pairs, View.GONE)
+                views.setViewVisibility(R.id.layout_columns, View.GONE)
             } else {
                 views.setViewVisibility(R.id.layout_empty, View.GONE)
-                views.setViewVisibility(R.id.list_pairs, View.VISIBLE)
+                views.setViewVisibility(R.id.layout_columns, View.VISIBLE)
+
+                val pairs = schedule.pairs
+                val slotIds = listOf(R.id.slot_col_1, R.id.slot_col_2, R.id.slot_col_3, R.id.slot_col_4)
+                val numIds = listOf(R.id.col1_tv_num, R.id.col2_tv_num, R.id.col3_tv_num, R.id.col4_tv_num)
+                val timeIds = listOf(R.id.col1_tv_time, R.id.col2_tv_time, R.id.col3_tv_time, R.id.col4_tv_time)
+                val abbrIds = listOf(R.id.col1_tv_abbr, R.id.col2_tv_abbr, R.id.col3_tv_abbr, R.id.col4_tv_abbr)
+                val subjectIds = listOf(R.id.col1_tv_subject, R.id.col2_tv_subject, R.id.col3_tv_subject, R.id.col4_tv_subject)
+                val roomIds = listOf(R.id.col1_tv_room, R.id.col2_tv_room, R.id.col3_tv_room, R.id.col4_tv_room)
+
+                val openPendingIntent = createOpenWebPendingIntent(context)
+
+                for (i in 0 until 4) {
+                    val slotId = slotIds[i]
+                    if (i < pairs.size) {
+                        val pair = pairs[i]
+                        views.setViewVisibility(slotId, View.VISIBLE)
+                        views.setTextViewText(numIds[i], pair.pairNumber.toString())
+                        // Звонки
+                        views.setTextViewText(timeIds[i], "${pair.timeStart}–${pair.timeEnd}")
+                        // Сокращение (УП, СПП, АСП)
+                        views.setTextViewText(abbrIds[i], pair.abbr)
+                        // Компактное название предмета
+                        views.setTextViewText(subjectIds[i], pair.shortName)
+                        // Аудитория
+                        views.setTextViewText(roomIds[i], pair.cleanRoom)
+
+                        if (pair.isCurrent) {
+                            views.setInt(slotId, "setBackgroundResource", R.drawable.bg_pair_item_current)
+                        } else {
+                            views.setInt(slotId, "setBackgroundResource", R.drawable.bg_pair_item)
+                        }
+                        views.setOnClickPendingIntent(slotId, openPendingIntent)
+                    } else {
+                        views.setViewVisibility(slotId, View.GONE)
+                    }
+                }
             }
 
             // Refresh action
             val refreshPendingIntent = createRefreshPendingIntent(context)
             views.setOnClickPendingIntent(R.id.btn_refresh, refreshPendingIntent)
 
-            // Click on list item opens web schedule
-            val listClickPendingIntent = createOpenWebPendingIntent(context)
-            views.setPendingIntentTemplate(R.id.list_pairs, listClickPendingIntent)
+            return views
+        }
+
+        /**
+         * Compact Vertical Rows Layout (for narrow widgets like 2x2, 2x3).
+         */
+        private fun buildCompactRowsViews(
+            context: Context,
+            appWidgetId: Int,
+            schedule: DaySchedule
+        ): RemoteViews {
+            val views = RemoteViews(context.packageName, R.layout.widget_schedule_compact_rows)
+
+            if (schedule.pairs.isEmpty()) {
+                views.setViewVisibility(R.id.layout_empty, View.VISIBLE)
+                views.setViewVisibility(R.id.layout_rows, View.GONE)
+            } else {
+                views.setViewVisibility(R.id.layout_empty, View.GONE)
+                views.setViewVisibility(R.id.layout_rows, View.VISIBLE)
+
+                val pairs = schedule.pairs
+                val slotIds = listOf(R.id.slot_row_1, R.id.slot_row_2, R.id.slot_row_3, R.id.slot_row_4)
+                val numIds = listOf(R.id.row1_tv_num, R.id.row2_tv_num, R.id.row3_tv_num, R.id.row4_tv_num)
+                val nameIds = listOf(R.id.row1_tv_name, R.id.row2_tv_name, R.id.row3_tv_name, R.id.row4_tv_name)
+                val timeIds = listOf(R.id.row1_tv_time, R.id.row2_tv_time, R.id.row3_tv_time, R.id.row4_tv_time)
+
+                val openPendingIntent = createOpenWebPendingIntent(context)
+
+                for (i in 0 until 4) {
+                    val slotId = slotIds[i]
+                    if (i < pairs.size) {
+                        val pair = pairs[i]
+                        views.setViewVisibility(slotId, View.VISIBLE)
+                        views.setTextViewText(numIds[i], pair.pairNumber.toString())
+                        // Название и аудитория
+                        views.setTextViewText(nameIds[i], "${pair.abbr} · ${pair.cleanRoom}")
+                        // Звонки
+                        views.setTextViewText(timeIds[i], pair.timeStart)
+
+                        if (pair.isCurrent) {
+                            views.setInt(slotId, "setBackgroundResource", R.drawable.bg_pair_item_current)
+                        } else {
+                            views.setInt(slotId, "setBackgroundResource", R.drawable.bg_pair_item)
+                        }
+                        views.setOnClickPendingIntent(slotId, openPendingIntent)
+                    } else {
+                        views.setViewVisibility(slotId, View.GONE)
+                    }
+                }
+            }
+
+            // Refresh action
+            val refreshPendingIntent = createRefreshPendingIntent(context)
+            views.setOnClickPendingIntent(R.id.btn_refresh, refreshPendingIntent)
 
             return views
         }
 
+        /**
+         * Expanded Tall Layout (for 3x3, 4x3, 4x4 widgets).
+         */
         private fun buildExpandedViews(
             context: Context,
             appWidgetId: Int,
@@ -112,7 +202,6 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             }
             views.setTextViewText(R.id.tv_header_date, headerDate)
 
-            // Adapter Intent with is_compact=false
             val serviceIntent = Intent(context, ScheduleWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 putExtra("is_compact", false)
@@ -129,15 +218,11 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
                 views.setViewVisibility(R.id.list_pairs, View.VISIBLE)
             }
 
-            // Refresh action
             val refreshPendingIntent = createRefreshPendingIntent(context)
             views.setOnClickPendingIntent(R.id.btn_refresh, refreshPendingIntent)
 
-            // Open website action
             val openWebPendingIntent = createOpenWebPendingIntent(context)
             views.setOnClickPendingIntent(R.id.btn_open_web, openWebPendingIntent)
-
-            // Click on list item opens web schedule
             views.setPendingIntentTemplate(R.id.list_pairs, openWebPendingIntent)
 
             return views
@@ -186,7 +271,6 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
 
-        // Background sync check
         CoroutineScope(Dispatchers.IO).launch {
             val updated = ScheduleRepository.fetchAndCache(context)
             if (updated) {
