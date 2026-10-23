@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ПОНБ-УП-304С Расписание</string>
+    <string name="widget_name">Расписание на сегодня</string>
+    <string name="group_name">ПОНБ-УП-304С</string>
+    <string name="institute_name">Институт права УУНиТ</string>
+    <string name="no_pairs_today">Сегодня пар нет</string>
+    <string name="no_pairs_sub">Выходной или нерабочий праздничный день</string>
+    <string name="status_now">СЕЙЧАС</string>
+    <string name="refresh">Обновить</string>
+    <string name="open_cabinet">Открыть кабинет</string>
+</resources>
