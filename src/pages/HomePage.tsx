@@ -119,7 +119,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
           <img
             src={emblemImg}
             alt="Эмблема ПОНБ"
-            className="w-72 h-72 sm:w-80 sm:h-80 md:w-88 md:h-88 lg:w-[390px] lg:h-[390px] object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] opacity-40 sm:opacity-75 md:opacity-90 lg:opacity-95 transform rotate-[-1deg] transition-all duration-700"
+            className="w-72 h-72 sm:w-80 sm:h-80 md:w-88 md:h-88 lg:w-[390px] lg:h-[390px] object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] opacity-40 sm:opacity-75 md:opacity-90 lg:opacity-95 transition-opacity duration-500"
           />
         </div>
       </div>
