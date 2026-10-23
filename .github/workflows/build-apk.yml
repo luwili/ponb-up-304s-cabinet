@@ -42,14 +42,14 @@ jobs:
       - name: Prepare APK Artifact
         run: |
           mkdir -p output
-          cp android/app/build/outputs/apk/debug/app-debug.apk output/StudyRoom-ПОНБ-УП-304С.apk
-          echo "APK successfully built: $(ls -lh output/StudyRoom-ПОНБ-УП-304С.apk)"
+          cp android/app/build/outputs/apk/debug/app-debug.apk output/StudyRoom-Widget.apk
+          echo "APK successfully built: $(ls -lh output/StudyRoom-Widget.apk)"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: StudyRoom-ПОНБ-УП-304С-APK
-          path: output/StudyRoom-ПОНБ-УП-304С.apk
+          name: StudyRoom-Widget-APK
+          path: output/StudyRoom-Widget.apk
           if-no-files-found: error
 
       - name: Publish GitHub Release with APK
@@ -69,7 +69,7 @@ jobs:
               * Кнопка мгновенного обновления прямо с домашнего экрана.
               * Прямой переход в веб-кабинет по нажатию.
             
-            **Скачать APK:** [StudyRoom-ПОНБ-УП-304С.apk](https://github.com/${{ github.repository }}/releases/download/widget-apk-latest/StudyRoom-%D0%9F%D0%9E%D0%9D%D0%91-%D0%A3%D0%9F-304%D0%A1.apk)
-          files: output/StudyRoom-ПОНБ-УП-304С.apk
+            **Скачать APK:** [StudyRoom-Widget.apk](https://github.com/${{ github.repository }}/releases/download/widget-apk-latest/StudyRoom-Widget.apk)
+          files: output/StudyRoom-Widget.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
