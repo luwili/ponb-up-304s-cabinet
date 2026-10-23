@@ -9,32 +9,83 @@
   "bellSchedule": [
     {
       "pair": 1,
+      "shift": 1,
+      "shiftPair": 1,
+      "label": "1 ПАРА",
       "timeStart": "08:00",
       "timeEnd": "09:20",
-      "break": "15 минут"
+      "break": "10 минут"
     },
     {
       "pair": 2,
-      "timeStart": "09:35",
-      "timeEnd": "10:55",
-      "break": "40 минут (большая перемена)"
+      "shift": 1,
+      "shiftPair": 2,
+      "label": "2 ПАРА",
+      "timeStart": "09:30",
+      "timeEnd": "10:50",
+      "break": "20 минут"
     },
     {
       "pair": 3,
-      "timeStart": "11:35",
-      "timeEnd": "12:55",
-      "break": "15 минут"
+      "shift": 1,
+      "shiftPair": 3,
+      "label": "3 ПАРА",
+      "timeStart": "11:10",
+      "timeEnd": "12:30",
+      "break": "10 минут"
     },
     {
       "pair": 4,
-      "timeStart": "13:10",
-      "timeEnd": "14:30",
-      "break": "15 минут"
+      "shift": 1,
+      "shiftPair": 4,
+      "label": "4 ПАРА",
+      "timeStart": "12:40",
+      "timeEnd": "14:00",
+      "break": "10 минут"
     },
     {
       "pair": 5,
-      "timeStart": "14:45",
-      "timeEnd": "16:05",
+      "shift": 2,
+      "shiftPair": 1,
+      "label": "1 ПАРА (2 смена)",
+      "timeStart": "14:10",
+      "timeEnd": "15:30",
+      "break": "10 минут"
+    },
+    {
+      "pair": 6,
+      "shift": 2,
+      "shiftPair": 2,
+      "label": "2 ПАРА (2 смена)",
+      "timeStart": "15:40",
+      "timeEnd": "17:00",
+      "break": "20 минут"
+    },
+    {
+      "pair": 7,
+      "shift": 2,
+      "shiftPair": 3,
+      "label": "3 ПАРА (2 смена)",
+      "timeStart": "17:20",
+      "timeEnd": "18:40",
+      "break": "10 минут"
+    },
+    {
+      "pair": 8,
+      "shift": 2,
+      "shiftPair": 4,
+      "label": "4 ПАРА (2 смена)",
+      "timeStart": "18:50",
+      "timeEnd": "20:10",
+      "break": "10 минут"
+    },
+    {
+      "pair": 9,
+      "shift": 2,
+      "shiftPair": 5,
+      "label": "5 ПАРА (2 смена)",
+      "timeStart": "20:20",
+      "timeEnd": "21:40",
       "break": ""
     }
   ],
@@ -59,8 +110,8 @@
         {
           "id": "sch-1-2",
           "pairNumber": 2,
-          "timeStart": "09:35",
-          "timeEnd": "10:55",
+          "timeStart": "09:30",
+          "timeEnd": "10:50",
           "subjectId": "fin-gramotnost",
           "subjectName": "Основы финансовой грамотности",
           "type": "Практика (семинар)",
@@ -71,8 +122,8 @@
         {
           "id": "sch-1-3",
           "pairNumber": 3,
-          "timeStart": "11:35",
-          "timeEnd": "12:55",
+          "timeStart": "11:10",
+          "timeEnd": "12:30",
           "subjectId": "spec-podgotovka",
           "subjectName": "Специальная профессиональная подготовка",
           "type": "Практика (семинар)",
@@ -83,8 +134,8 @@
         {
           "id": "sch-1-4",
           "pairNumber": 4,
-          "timeStart": "13:10",
-          "timeEnd": "14:30",
+          "timeStart": "12:40",
+          "timeEnd": "14:00",
           "subjectId": "spec-podgotovka",
           "subjectName": "Специальная профессиональная подготовка",
           "type": "Практика (семинар)",
@@ -102,8 +153,8 @@
         {
           "id": "sch-2-1",
           "pairNumber": 4,
-          "timeStart": "13:10",
-          "timeEnd": "14:30",
+          "timeStart": "12:40",
+          "timeEnd": "14:00",
           "subjectId": "fin-pravo",
           "subjectName": "Финансовое право",
           "type": "Лекция",
@@ -133,8 +184,8 @@
         {
           "id": "sch-3-2",
           "pairNumber": 2,
-          "timeStart": "09:35",
-          "timeEnd": "10:55",
+          "timeStart": "09:30",
+          "timeEnd": "10:50",
           "subjectId": "grazhd-pravo-2",
           "subjectName": "Гражданское право (часть 2)",
           "type": "Практика (семинар)",
@@ -145,8 +196,8 @@
         {
           "id": "sch-3-3",
           "pairNumber": 3,
-          "timeStart": "11:35",
-          "timeEnd": "12:55",
+          "timeStart": "11:10",
+          "timeEnd": "12:30",
           "subjectId": "ugolov-proc",
           "subjectName": "Уголовно-процессуальное право (уголовный процесс)",
           "type": "Практика (семинар)",
@@ -157,8 +208,8 @@
         {
           "id": "sch-3-4",
           "pairNumber": 4,
-          "timeStart": "13:10",
-          "timeEnd": "14:30",
+          "timeStart": "12:40",
+          "timeEnd": "14:00",
           "subjectId": "ugolov-proc",
           "subjectName": "Уголовно-процессуальное право (уголовный процесс)",
           "type": "Практика (семинар)",
@@ -188,8 +239,8 @@
         {
           "id": "sch-4-2",
           "pairNumber": 2,
-          "timeStart": "09:35",
-          "timeEnd": "10:55",
+          "timeStart": "09:30",
+          "timeEnd": "10:50",
           "subjectId": "admin-sud-proc",
           "subjectName": "Административный судебный процесс",
           "type": "Практика (семинар)",
@@ -200,8 +251,8 @@
         {
           "id": "sch-4-3",
           "pairNumber": 3,
-          "timeStart": "11:35",
-          "timeEnd": "12:55",
+          "timeStart": "11:10",
+          "timeEnd": "12:30",
           "subjectId": "fin-pravo",
           "subjectName": "Финансовое право",
           "type": "Практика (семинар)",
@@ -212,8 +263,8 @@
         {
           "id": "sch-4-4",
           "pairNumber": 4,
-          "timeStart": "13:10",
-          "timeEnd": "14:30",
+          "timeStart": "12:40",
+          "timeEnd": "14:00",
           "subjectId": "fin-pravo",
           "subjectName": "Финансовое право",
           "type": "Практика (семинар)",
@@ -243,8 +294,8 @@
         {
           "id": "sch-5-2",
           "pairNumber": 2,
-          "timeStart": "09:35",
-          "timeEnd": "10:55",
+          "timeStart": "09:30",
+          "timeEnd": "10:50",
           "subjectId": "fizra",
           "subjectName": "Общая физическая подготовка",
           "type": "Практика (семинар)",
@@ -255,8 +306,8 @@
         {
           "id": "sch-5-3",
           "pairNumber": 3,
-          "timeStart": "11:35",
-          "timeEnd": "12:55",
+          "timeStart": "11:10",
+          "timeEnd": "12:30",
           "subjectId": "eco-pravo",
           "subjectName": "Экологическое право",
           "type": "Практика (семинар)",
@@ -267,8 +318,8 @@
         {
           "id": "sch-5-4",
           "pairNumber": 4,
-          "timeStart": "13:10",
-          "timeEnd": "14:30",
+          "timeStart": "12:40",
+          "timeEnd": "14:00",
           "subjectId": "eco-pravo",
           "subjectName": "Экологическое право",
           "type": "Практика (семинар)",
@@ -286,8 +337,8 @@
         {
           "id": "sch-6-1",
           "pairNumber": 3,
-          "timeStart": "11:35",
-          "timeEnd": "12:55",
+          "timeStart": "11:10",
+          "timeEnd": "12:30",
           "subjectId": "ugolov-pravo-osob",
           "subjectName": "Уголовное право (особенная часть)",
           "type": "Практика (семинар)",
@@ -298,8 +349,8 @@
         {
           "id": "sch-6-2",
           "pairNumber": 4,
-          "timeStart": "13:10",
-          "timeEnd": "14:30",
+          "timeStart": "12:40",
+          "timeEnd": "14:00",
           "subjectId": "ugolov-pravo-osob",
           "subjectName": "Уголовное право (особенная часть)",
           "type": "Практика (семинар)",

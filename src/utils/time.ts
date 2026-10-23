@@ -21,11 +21,17 @@ export interface UfaTimeInfo {
 }
 
 const BELL_SCHEDULE = [
-  { pair: 1, start: '08:00', end: '09:20', startMins: 8 * 60, endMins: 9 * 60 + 20 },
-  { pair: 2, start: '09:35', end: '10:55', startMins: 9 * 60 + 35, endMins: 10 * 60 + 55 },
-  { pair: 3, start: '11:35', end: '12:55', startMins: 11 * 60 + 35, endMins: 12 * 60 + 55 },
-  { pair: 4, start: '13:10', end: '14:30', startMins: 13 * 60 + 10, endMins: 14 * 60 + 30 },
-  { pair: 5, start: '14:45', end: '16:05', startMins: 14 * 60 + 45, endMins: 16 * 60 + 5 },
+  // 1-я смена
+  { pair: 1, label: '1-я пара', start: '08:00', end: '09:20', startMins: 8 * 60, endMins: 9 * 60 + 20 },
+  { pair: 2, label: '2-я пара', start: '09:30', end: '10:50', startMins: 9 * 60 + 30, endMins: 10 * 60 + 50 },
+  { pair: 3, label: '3-я пара', start: '11:10', end: '12:30', startMins: 11 * 60 + 10, endMins: 12 * 60 + 30 },
+  { pair: 4, label: '4-я пара', start: '12:40', end: '14:00', startMins: 12 * 60 + 40, endMins: 14 * 60 },
+  // 2-я смена
+  { pair: 5, label: '1-я пара (2 смена)', start: '14:10', end: '15:30', startMins: 14 * 60 + 10, endMins: 15 * 60 + 30 },
+  { pair: 6, label: '2-я пара (2 смена)', start: '15:40', end: '17:00', startMins: 15 * 60 + 40, endMins: 17 * 60 },
+  { pair: 7, label: '3-я пара (2 смена)', start: '17:20', end: '18:40', startMins: 17 * 60 + 20, endMins: 18 * 60 + 40 },
+  { pair: 8, label: '4-я пара (2 смена)', start: '18:50', end: '20:10', startMins: 18 * 60 + 50, endMins: 20 * 60 + 10 },
+  { pair: 9, label: '5-я пара (2 смена)', start: '20:20', end: '21:40', startMins: 20 * 60 + 20, endMins: 21 * 60 + 40 },
 ];
 
 export function getUfaTimeInfo(customDate?: Date): UfaTimeInfo {
@@ -91,7 +97,7 @@ export function getUfaTimeInfo(customDate?: Date): UfaTimeInfo {
           pair: p.pair,
           start: p.start,
           end: p.end,
-          description: `Идет ${p.pair}-я пара`
+          description: `Идет ${p.label}`
         };
         break;
       } else if (i < BELL_SCHEDULE.length - 1) {
@@ -102,7 +108,7 @@ export function getUfaTimeInfo(customDate?: Date): UfaTimeInfo {
             pair: nextP.pair,
             start: nextP.start,
             end: nextP.end,
-            description: `Перемена перед ${nextP.pair}-й парой`
+            description: `Перемена перед ${nextP.label}`
           };
           break;
         }

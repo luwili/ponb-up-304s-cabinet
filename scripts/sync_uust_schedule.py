@@ -50,19 +50,99 @@ WEEKDAYS = [
 ]
 
 BELL_SCHEDULE = [
-    {"pair": 1, "timeStart": "08:00", "timeEnd": "09:20", "break": "15 минут"},
-    {"pair": 2, "timeStart": "09:35", "timeEnd": "10:55", "break": "40 минут (большая перемена)"},
-    {"pair": 3, "timeStart": "11:35", "timeEnd": "12:55", "break": "15 минут"},
-    {"pair": 4, "timeStart": "13:10", "timeEnd": "14:30", "break": "15 минут"},
-    {"pair": 5, "timeStart": "14:45", "timeEnd": "16:05", "break": ""},
+    {
+        "pair": 1,
+        "shift": 1,
+        "shiftPair": 1,
+        "label": "1 ПАРА",
+        "timeStart": "08:00",
+        "timeEnd": "09:20",
+        "break": "10 минут"
+    },
+    {
+        "pair": 2,
+        "shift": 1,
+        "shiftPair": 2,
+        "label": "2 ПАРА",
+        "timeStart": "09:30",
+        "timeEnd": "10:50",
+        "break": "20 минут"
+    },
+    {
+        "pair": 3,
+        "shift": 1,
+        "shiftPair": 3,
+        "label": "3 ПАРА",
+        "timeStart": "11:10",
+        "timeEnd": "12:30",
+        "break": "10 минут"
+    },
+    {
+        "pair": 4,
+        "shift": 1,
+        "shiftPair": 4,
+        "label": "4 ПАРА",
+        "timeStart": "12:40",
+        "timeEnd": "14:00",
+        "break": "10 минут"
+    },
+    {
+        "pair": 5,
+        "shift": 2,
+        "shiftPair": 1,
+        "label": "1 ПАРА (2 смена)",
+        "timeStart": "14:10",
+        "timeEnd": "15:30",
+        "break": "10 минут"
+    },
+    {
+        "pair": 6,
+        "shift": 2,
+        "shiftPair": 2,
+        "label": "2 ПАРА (2 смена)",
+        "timeStart": "15:40",
+        "timeEnd": "17:00",
+        "break": "20 минут"
+    },
+    {
+        "pair": 7,
+        "shift": 2,
+        "shiftPair": 3,
+        "label": "3 ПАРА (2 смена)",
+        "timeStart": "17:20",
+        "timeEnd": "18:40",
+        "break": "10 минут"
+    },
+    {
+        "pair": 8,
+        "shift": 2,
+        "shiftPair": 4,
+        "label": "4 ПАРА (2 смена)",
+        "timeStart": "18:50",
+        "timeEnd": "20:10",
+        "break": "10 минут"
+    },
+    {
+        "pair": 9,
+        "shift": 2,
+        "shiftPair": 5,
+        "label": "5 ПАРА (2 смена)",
+        "timeStart": "20:20",
+        "timeEnd": "21:40",
+        "break": ""
+    }
 ]
 
 PAIR_TIMES = {
     1: ("08:00", "09:20"),
-    2: ("09:35", "10:55"),
-    3: ("11:35", "12:55"),
-    4: ("13:10", "14:30"),
-    5: ("14:45", "16:05")
+    2: ("09:30", "10:50"),
+    3: ("11:10", "12:30"),
+    4: ("12:40", "14:00"),
+    5: ("14:10", "15:30"),
+    6: ("15:40", "17:00"),
+    7: ("17:20", "18:40"),
+    8: ("18:50", "20:10"),
+    9: ("20:20", "21:40")
 }
 
 def get_credentials():
@@ -563,6 +643,16 @@ def sync_all(target_week=None, force=False):
 
     # Сохранение расписания
     if sched_entries or force:
+        saved_bell_sched = BELL_SCHEDULE
+        if sched_path.exists():
+            try:
+                with open(sched_path, 'r', encoding='utf-8') as f:
+                    old_data = json.load(f)
+                    if 'bellSchedule' in old_data and old_data['bellSchedule']:
+                        saved_bell_sched = old_data['bellSchedule']
+            except Exception:
+                pass
+
         doc_sched = {
             "group": "ПОНБ-УП-304С",
             "semester": "Осенний семестр 2026/2027",
@@ -571,7 +661,7 @@ def sync_all(target_week=None, force=False):
             "weekType": "even" if target_week % 2 == 0 else "odd",
             "building": "Институт права (ул. Достоевского, 131)",
             "lastSyncedAt": now_ufa.strftime('%Y-%m-%d %H:%M:%S UTC+5'),
-            "bellSchedule": BELL_SCHEDULE,
+            "bellSchedule": saved_bell_sched,
             "days": days_data
         }
         with open(sched_path, 'w', encoding='utf-8') as f:

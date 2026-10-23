@@ -220,7 +220,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
           <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
             <span className="flex items-center space-x-1.5">
               <Clock className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
-              <span>Звонки: 08:00, 09:35, 11:35, 13:10, 14:45</span>
+              <span>Звонки: 08:00, 09:30, 11:10, 12:40 (1 см.) · 14:10, 15:40, 17:20 (2 см.)</span>
             </span>
             <span className="font-medium text-slate-600 dark:text-slate-400">ул. Достоевского, 131</span>
           </div>

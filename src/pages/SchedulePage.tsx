@@ -310,39 +310,88 @@ export const SchedulePage: React.FC<SchedulePageProps> = ({
       )}
 
       {/* Bell Schedule Reference */}
-      <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
-        <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-3 flex items-center space-x-2">
-          <Clock className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-          <span>Официальное расписание звонков Института права</span>
-        </h3>
-
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {scheduleData.bellSchedule.map((b) => (
-            <div key={b.pair} className="p-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-center">
-              <span className="text-[10px] uppercase font-bold text-slate-400">Пара {b.pair}</span>
-              <div className="font-mono font-bold text-sm text-slate-900 dark:text-white mt-0.5">
-                {b.timeStart} – {b.timeEnd}
-              </div>
-              {b.break && (
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
-                  Перерыв: {b.break}
-                </div>
-              )}
-            </div>
-          ))}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h3 className="font-extrabold text-slate-900 dark:text-white text-lg flex items-center space-x-2">
+              <Clock className="w-5 h-5 text-amber-500" />
+              <span>Расписание звонков Института права УУНиТ</span>
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Официальная сетка звонков для первой и второй смены с длительностью перемен.
+            </p>
+          </div>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
-          <span>Официальный первоисточник расписания: law-bsu.ru/schedules</span>
-          <a
-            href="https://law-bsu.ru/schedules"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center space-x-1 text-brand-700 dark:text-brand-400 font-semibold hover:underline"
-          >
-            <span>Открыть расписание на сайте института</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
+        {/* 1st Shift */}
+        <div className="space-y-3">
+          <div className="flex items-center space-x-2">
+            <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 dark:bg-brand-950 text-brand-900 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+              1-я смена
+            </span>
+            <span className="text-xs text-slate-400">Пары 1 – 4 (08:00 – 14:00)</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {scheduleData.bellSchedule.filter((b: any) => b.shift === 1 || !b.shift && b.pair <= 4).map((b: any) => (
+              <div 
+                key={b.pair} 
+                className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 text-center hover:border-brand-400 transition-colors"
+              >
+                <span className="text-[11px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
+                  {b.label || `${b.pair} ПАРА`}
+                </span>
+                <div className="font-mono font-extrabold text-base text-slate-900 dark:text-white my-1">
+                  {b.timeStart} – {b.timeEnd}
+                </div>
+                {b.break ? (
+                  <div className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40">
+                    Перерыв: {b.break}
+                  </div>
+                ) : (
+                  <div className="text-[10px] text-slate-400">—</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 2nd Shift */}
+        <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center space-x-2">
+            <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+              2-я смена
+            </span>
+            <span className="text-xs text-slate-400">Пары 1 – 5 (14:10 – 21:40)</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            {scheduleData.bellSchedule.filter((b: any) => b.shift === 2 || !b.shift && b.pair > 4).map((b: any) => (
+              <div 
+                key={b.pair} 
+                className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80 text-center hover:border-indigo-400 transition-colors"
+              >
+                <span className="text-[11px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
+                  {b.label || `${b.pair - 4} ПАРА`}
+                </span>
+                <div className="font-mono font-extrabold text-base text-slate-900 dark:text-white my-1">
+                  {b.timeStart} – {b.timeEnd}
+                </div>
+                {b.break ? (
+                  <div className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40">
+                    Перерыв: {b.break}
+                  </div>
+                ) : (
+                  <div className="text-[10px] text-slate-400">—</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
+          <span>Сетка звонков зафиксирована локально и защищена от перезаписи из ИСУ</span>
+          <span className="text-slate-400 font-mono">ул. Достоевского, 131</span>
         </div>
       </div>
     </div>
