@@ -9,7 +9,6 @@ import {
   Pin, 
   ArrowRight, 
   Sparkles,
-  ShieldCheck,
   FileText,
   Bookmark,
   RefreshCw,
@@ -18,6 +17,7 @@ import {
   ChevronUp,
   HeartHandshake
 } from 'lucide-react';
+import emblemImg from '../assets/emblem.png';
 import scheduleData from '../data/schedule.json';
 import rawAnnouncements from '../data/announcements.json';
 import topicsMetadata from '../data/topics-metadata.json';
@@ -62,15 +62,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-950 via-brand-900 to-slate-900 text-white p-6 sm:p-8 shadow-xl border border-brand-800/40">
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-800/60 border border-brand-700/50 text-amber-300 text-xs font-semibold mb-4 backdrop-blur-sm">
-            <Sparkles className="w-3.5 h-3.5" />
+      {/* Hero Banner styled after the new Emblem */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#06101f] via-[#091b38] to-[#040812] text-white p-6 sm:p-8 shadow-2xl border border-amber-500/30 ring-1 ring-amber-400/20">
+        <div className="relative z-10 max-w-xl lg:max-w-2xl">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-semibold mb-4 backdrop-blur-md shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             <span>Институт права УУНиТ · Уфа</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2 drop-shadow-sm">
             Кабинет группы ПОНБ-УП-304С
           </h1>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mb-6">
@@ -80,7 +80,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => onNavigate('schedule')}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm shadow-md transition-all hover:scale-105"
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/25 border border-amber-300/60 transition-all hover:scale-105 active:scale-95"
             >
               <Calendar className="w-4 h-4" />
               <span>Расписание пар</span>
@@ -88,7 +88,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
 
             <button
               onClick={() => onNavigate('topics')}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm backdrop-blur-sm border border-white/10 transition-colors"
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-[#0c2244]/80 hover:bg-[#12315e] text-white font-medium text-sm backdrop-blur-md border border-amber-400/20 hover:border-amber-400/40 shadow-sm transition-all"
             >
               <BookOpen className="w-4 h-4" />
               <span>Конспекты ({topicsData.length})</span>
@@ -96,15 +96,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
 
             <button
               onClick={() => onNavigate('exam')}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-white font-medium text-sm backdrop-blur-sm border border-rose-400/30 transition-colors"
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-950/40 to-amber-950/30 hover:from-rose-900/50 hover:to-amber-900/40 text-rose-200 hover:text-white font-medium text-sm backdrop-blur-md border border-rose-500/30 hover:border-rose-400/50 shadow-sm transition-all"
             >
-              <Sparkles className="w-4 h-4 text-rose-300" />
+              <Sparkles className="w-4 h-4 text-amber-300" />
               <span>Сессия (4 экз. · 10 зач.)</span>
             </button>
 
             <button
               onClick={() => onNavigate('subjects')}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm backdrop-blur-sm border border-white/10 transition-colors"
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-[#0c2244]/80 hover:bg-[#12315e] text-white font-medium text-sm backdrop-blur-md border border-amber-400/20 hover:border-amber-400/40 shadow-sm transition-all"
             >
               <GraduationCap className="w-4 h-4" />
               <span>Предметы семестра</span>
@@ -112,9 +112,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSync, isSy
           </div>
         </div>
 
-        {/* Decorative background insignia */}
-        <div className="absolute -right-8 -bottom-12 opacity-10 pointer-events-none">
-          <ShieldCheck className="w-96 h-96 text-white" />
+        {/* Decorative background insignia styled after the emblem */}
+        <div className="absolute -right-10 sm:-right-6 md:-right-2 lg:right-6 -bottom-14 sm:-bottom-10 md:top-1/2 md:-bottom-auto md:-translate-y-1/2 pointer-events-none select-none flex items-center justify-center">
+          {/* Ambient sapphire & golden halo glow */}
+          <div className="absolute w-72 h-72 sm:w-88 sm:h-88 md:w-96 md:h-96 rounded-full bg-gradient-to-tr from-amber-500/20 via-blue-600/25 to-amber-300/10 blur-3xl -z-10" />
+          <img
+            src={emblemImg}
+            alt="Эмблема ПОНБ"
+            className="w-72 h-72 sm:w-80 sm:h-80 md:w-88 md:h-88 lg:w-[390px] lg:h-[390px] object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] opacity-40 sm:opacity-75 md:opacity-90 lg:opacity-95 transform rotate-[-1deg] transition-all duration-700"
+          />
         </div>
       </div>
 

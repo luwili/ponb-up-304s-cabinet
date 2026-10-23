@@ -6,14 +6,20 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0f2b48",
-  "theme_color": "#0f2b48",
+  "background_color": "#06101f",
+  "theme_color": "#06101f",
   "icons": [
+    {
+      "src": "emblem-icon.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

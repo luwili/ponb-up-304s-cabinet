@@ -7,6 +7,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.util.SizeF
 import android.view.View
 import android.widget.RemoteViews
 import kotlinx.coroutines.CoroutineScope
@@ -24,27 +27,57 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
-            val views = RemoteViews(context.packageName, R.layout.widget_schedule)
             val schedule = ScheduleRepository.getTodaySchedule(context)
 
-            // Header labels
-            views.setTextViewText(R.id.tv_week_badge, "Неделя ${schedule.weekNumber}")
-            val headerDate = if (schedule.isToday) {
-                "${TimeUtils.getFormattedHeaderDate()} (${schedule.dayName})"
+            val remoteViews = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // Android 12+ Responsive Layouts
+                val compactView = buildCompactViews(context, appWidgetId, schedule)
+                val expandedView = buildExpandedViews(context, appWidgetId, schedule)
+                val viewMapping = mapOf(
+                    SizeF(120f, 60f) to compactView,
+                    SizeF(240f, 150f) to expandedView
+                )
+                RemoteViews(viewMapping)
             } else {
-                "Завтра: ${schedule.dayName}, ${schedule.date}"
+                // Android < 12 size detection
+                val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 280)
+                val height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 180)
+                if (height < 140 || width < 230) {
+                    buildCompactViews(context, appWidgetId, schedule)
+                } else {
+                    buildExpandedViews(context, appWidgetId, schedule)
+                }
+            }
+
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_pairs)
+        }
+
+        private fun buildCompactViews(
+            context: Context,
+            appWidgetId: Int,
+            schedule: DaySchedule
+        ): RemoteViews {
+            val views = RemoteViews(context.packageName, R.layout.widget_schedule_compact)
+
+            views.setTextViewText(R.id.tv_week_badge, "Нед. ${schedule.weekNumber}")
+            val headerDate = if (schedule.isToday) {
+                schedule.dayName
+            } else {
+                "Завтра (${schedule.dayName})"
             }
             views.setTextViewText(R.id.tv_header_date, headerDate)
 
-            // Set up RemoteViewsService for ListView
+            // Adapter Intent with is_compact=true
             val serviceIntent = Intent(context, ScheduleWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+                putExtra("is_compact", true)
+                data = Uri.parse("ru.uust.studyroom://widget/$appWidgetId/compact")
             }
             views.setRemoteAdapter(R.id.list_pairs, serviceIntent)
             views.setEmptyView(R.id.list_pairs, R.id.layout_empty)
 
-            // Empty state visibility
             if (schedule.pairs.isEmpty()) {
                 views.setViewVisibility(R.id.layout_empty, View.VISIBLE)
                 views.setViewVisibility(R.id.list_pairs, View.GONE)
@@ -53,41 +86,85 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
                 views.setViewVisibility(R.id.list_pairs, View.VISIBLE)
             }
 
-            // Refresh action PendingIntent
+            // Refresh action
+            val refreshPendingIntent = createRefreshPendingIntent(context)
+            views.setOnClickPendingIntent(R.id.btn_refresh, refreshPendingIntent)
+
+            // Click on list item opens web schedule
+            val listClickPendingIntent = createOpenWebPendingIntent(context)
+            views.setPendingIntentTemplate(R.id.list_pairs, listClickPendingIntent)
+
+            return views
+        }
+
+        private fun buildExpandedViews(
+            context: Context,
+            appWidgetId: Int,
+            schedule: DaySchedule
+        ): RemoteViews {
+            val views = RemoteViews(context.packageName, R.layout.widget_schedule)
+
+            views.setTextViewText(R.id.tv_week_badge, "Неделя ${schedule.weekNumber}")
+            val headerDate = if (schedule.isToday) {
+                "${TimeUtils.getFormattedHeaderDate()} (${schedule.dayName})"
+            } else {
+                "Завтра: ${schedule.dayName}, ${schedule.date}"
+            }
+            views.setTextViewText(R.id.tv_header_date, headerDate)
+
+            // Adapter Intent with is_compact=false
+            val serviceIntent = Intent(context, ScheduleWidgetService::class.java).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                putExtra("is_compact", false)
+                data = Uri.parse("ru.uust.studyroom://widget/$appWidgetId/expanded")
+            }
+            views.setRemoteAdapter(R.id.list_pairs, serviceIntent)
+            views.setEmptyView(R.id.list_pairs, R.id.layout_empty)
+
+            if (schedule.pairs.isEmpty()) {
+                views.setViewVisibility(R.id.layout_empty, View.VISIBLE)
+                views.setViewVisibility(R.id.list_pairs, View.GONE)
+            } else {
+                views.setViewVisibility(R.id.layout_empty, View.GONE)
+                views.setViewVisibility(R.id.list_pairs, View.VISIBLE)
+            }
+
+            // Refresh action
+            val refreshPendingIntent = createRefreshPendingIntent(context)
+            views.setOnClickPendingIntent(R.id.btn_refresh, refreshPendingIntent)
+
+            // Open website action
+            val openWebPendingIntent = createOpenWebPendingIntent(context)
+            views.setOnClickPendingIntent(R.id.btn_open_web, openWebPendingIntent)
+
+            // Click on list item opens web schedule
+            views.setPendingIntentTemplate(R.id.list_pairs, openWebPendingIntent)
+
+            return views
+        }
+
+        private fun createRefreshPendingIntent(context: Context): PendingIntent {
             val refreshIntent = Intent(context, ScheduleWidgetProvider::class.java).apply {
                 action = ACTION_REFRESH
             }
-            val refreshPendingIntent = PendingIntent.getBroadcast(
+            return PendingIntent.getBroadcast(
                 context,
                 0,
                 refreshIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(R.id.btn_refresh, refreshPendingIntent)
+        }
 
-            // Open website action PendingIntent
+        private fun createOpenWebPendingIntent(context: Context): PendingIntent {
             val openWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(WEB_CABINET_URL)).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-            val openWebPendingIntent = PendingIntent.getActivity(
+            return PendingIntent.getActivity(
                 context,
                 1,
                 openWebIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(R.id.btn_open_web, openWebPendingIntent)
-
-            // Click on list item opens web schedule
-            val listClickPendingIntent = PendingIntent.getActivity(
-                context,
-                2,
-                openWebIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            views.setPendingIntentTemplate(R.id.list_pairs, listClickPendingIntent)
-
-            appWidgetManager.updateAppWidget(appWidgetId, views)
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_pairs)
         }
 
         fun updateAllWidgets(context: Context) {
@@ -118,6 +195,16 @@ class ScheduleWidgetProvider : AppWidgetProvider() {
                 }
             }
         }
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        updateAppWidget(context, appWidgetManager, appWidgetId)
     }
 
     override fun onReceive(context: Context, intent: Intent) {

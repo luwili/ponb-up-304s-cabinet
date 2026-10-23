@@ -6,9 +6,9 @@ import {
   Bookmark, 
   Clock, 
   Menu, 
-  Shield, 
   Building
 } from 'lucide-react';
+import emblemIcon from '../assets/emblem-icon.png';
 import { getUfaTimeInfo, UfaTimeInfo } from '../utils/time';
 
 interface HeaderProps {
@@ -54,17 +54,21 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button 
               onClick={() => onSelectTab('home')}
-              className="flex items-center space-x-2 text-left group"
+              className="flex items-center space-x-2.5 text-left group"
             >
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-900 via-brand-700 to-brand-500 flex items-center justify-center text-white shadow-sm ring-1 ring-brand-800/20 group-hover:scale-105 transition-transform">
-                <Shield className="w-5 h-5 text-amber-300" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-[#06101e] via-[#0b2447] to-[#12386c] flex items-center justify-center shadow-md ring-1 ring-amber-400/40 group-hover:ring-amber-300/70 group-hover:scale-105 transition-all p-1 overflow-hidden flex-shrink-0">
+                <img 
+                  src={emblemIcon} 
+                  alt="Эмблема ПОНБ-УП-304С" 
+                  className="w-full h-full object-contain filter drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]" 
+                />
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center space-x-1.5">
-                  <span className="font-bold text-slate-900 dark:text-white text-base tracking-tight leading-none">
+                  <span className="font-bold text-slate-900 dark:text-white text-base tracking-tight leading-none group-hover:text-brand-700 dark:group-hover:text-amber-300 transition-colors">
                     ПОНБ-УП-304С
                   </span>
-                  <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300 border border-brand-200 dark:border-brand-800 leading-none">
+                  <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-brand-100 dark:bg-brand-950/80 text-brand-800 dark:text-amber-300 border border-brand-200 dark:border-amber-500/30 leading-none">
                     УУНиТ
                   </span>
                 </div>

@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
-            android:textColor="@color/amber_primary"
+            android:textColor="@color/badge_number_text"
             android:textSize="15sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Название предмета"
-                android:textColor="@color/text_white"
+                android:textColor="@color/text_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -73,7 +73,7 @@
                 android:paddingEnd="5dp"
                 android:paddingBottom="1dp"
                 android:text="СЕЙЧАС"
-                android:textColor="#000000"
+                android:textColor="@color/badge_now_text"
                 android:textSize="9sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -87,7 +87,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Преподаватель"
-            android:textColor="@color/text_subtle"
+            android:textColor="@color/text_secondary"
             android:textSize="11sp" />
 
         <TextView
@@ -98,12 +98,12 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="каб. 310 · Достоевского 131"
-            android:textColor="@color/amber_primary"
+            android:textColor="@color/text_room"
             android:textSize="10sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Right Column: Time and Type -->
+    <!-- Right Column: Time (звонки) and Type -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="08:00 – 09:20"
-            android:textColor="@color/text_white"
+            android:textColor="@color/text_time"
             android:textSize="11sp"
             android:textStyle="bold" />
 
@@ -130,7 +130,7 @@
             android:paddingEnd="6dp"
             android:paddingBottom="2dp"
             android:text="Семинар"
-            android:textColor="@color/text_muted"
+            android:textColor="@color/badge_pill_text"
             android:textSize="9sp" />
     </LinearLayout>
 </LinearLayout>
