@@ -16,7 +16,9 @@ import {
   Calendar,
   ChevronRight,
   Clock,
-  Sparkles
+  Sparkles,
+  Maximize2,
+  ZoomIn
 } from 'lucide-react';
 import teachersData from '../data/teachers.json';
 import departmentsData from '../data/departments.json';
@@ -25,6 +27,14 @@ import { Teacher } from '../types';
 interface TeachersPageProps {
   initialSearch?: string;
   onNavigateSubject?: (subjectId: string) => void;
+}
+
+interface FullscreenPhotoState {
+  url: string;
+  fallbackUrl?: string;
+  name: string;
+  department?: string;
+  position?: string;
 }
 
 const resolvePhotoUrl = (url?: string) => {
@@ -44,14 +54,32 @@ export const TeachersPage: React.FC<TeachersPageProps> = ({
   const [selectedDept, setSelectedDept] = useState<string>('all');
   const [selectedDegree, setSelectedDegree] = useState<string>('all');
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
+  const [fullscreenPhoto, setFullscreenPhoto] = useState<FullscreenPhotoState | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedTeacher(null);
+      if (e.key === 'Escape') {
+        if (fullscreenPhoto) {
+          setFullscreenPhoto(null);
+        } else if (selectedTeacher) {
+          setSelectedTeacher(null);
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [fullscreenPhoto, selectedTeacher]);
+
+  useEffect(() => {
+    if (selectedTeacher || fullscreenPhoto) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedTeacher, fullscreenPhoto]);
 
   const groupTeachersCount = teachersData.filter((t) => t.isGroupTeacher).length;
 
@@ -195,26 +223,36 @@ export const TeachersPage: React.FC<TeachersPageProps> = ({
               <div>
                 {/* Header: Photo Thumbnail, Badges & Group connection */}
                 <div className="flex items-start space-x-3.5 mb-3">
-                  {t.photoUrl ? (
-                    <img
-                      src={resolvePhotoUrl(t.photoUrl)}
-                      alt={t.name}
-                      className="w-13 h-13 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm flex-shrink-0"
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        if (t.fallbackPhotoUrl && target.src !== t.fallbackPhotoUrl) {
-                          target.src = t.fallbackPhotoUrl;
-                        } else {
-                          target.style.display = 'none';
-                        }
-                      }}
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm flex-shrink-0">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 aspect-square rounded-2xl overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 relative shadow-sm">
+                    {t.photoUrl ? (
+                      <img
+                        src={resolvePhotoUrl(t.photoUrl)}
+                        alt={t.name}
+                        className="w-full h-full object-cover object-top block"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          if (t.fallbackPhotoUrl && target.src !== t.fallbackPhotoUrl) {
+                            target.src = t.fallbackPhotoUrl;
+                          } else {
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent) {
+                              const fallback = parent.querySelector('.photo-fallback');
+                              if (fallback) fallback.classList.remove('hidden');
+                            }
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className={`photo-fallback w-full h-full flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-sm ${
+                        t.photoUrl ? 'hidden' : ''
+                      }`}
+                    >
                       {t.name.split(' ').slice(0, 2).map((n) => n[0]).join('')}
                     </div>
-                  )}
+                  </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
@@ -339,28 +377,76 @@ export const TeachersPage: React.FC<TeachersPageProps> = ({
             {/* Profile Header with Photo */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pb-6 border-b border-slate-100 dark:border-slate-800">
               <div className="relative flex-shrink-0">
-                {selectedTeacher.photoUrl ? (
-                  <img
-                    src={resolvePhotoUrl(selectedTeacher.photoUrl)}
-                    alt={selectedTeacher.name}
-                    className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-brand-200 dark:border-brand-800 shadow-md ring-4 ring-brand-50 dark:ring-brand-950/60"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      if (selectedTeacher.fallbackPhotoUrl && target.src !== selectedTeacher.fallbackPhotoUrl) {
-                        target.src = selectedTeacher.fallbackPhotoUrl;
-                      } else {
-                        target.style.display = 'none';
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-200 dark:from-brand-950 dark:to-brand-900 border-2 border-brand-300 dark:border-brand-700 flex items-center justify-center text-brand-800 dark:text-brand-300 font-extrabold text-2xl shadow-md">
+                <div
+                  className={`w-24 h-24 sm:w-28 sm:h-28 rounded-2xl aspect-square overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800 border-2 border-brand-200 dark:border-brand-800 shadow-md ring-4 ring-brand-50 dark:ring-brand-950/60 relative ${
+                    selectedTeacher.photoUrl || selectedTeacher.fallbackPhotoUrl
+                      ? 'cursor-zoom-in group/modalphoto'
+                      : ''
+                  }`}
+                  onClick={() => {
+                    const photo = selectedTeacher.photoUrl || selectedTeacher.fallbackPhotoUrl;
+                    if (photo) {
+                      setFullscreenPhoto({
+                        url: resolvePhotoUrl(selectedTeacher.photoUrl || selectedTeacher.fallbackPhotoUrl || ''),
+                        fallbackUrl: selectedTeacher.fallbackPhotoUrl,
+                        name: selectedTeacher.name,
+                        department: selectedTeacher.department,
+                        position: selectedTeacher.position
+                      });
+                    }
+                  }}
+                  title={
+                    selectedTeacher.photoUrl || selectedTeacher.fallbackPhotoUrl
+                      ? 'Нажмите, чтобы открыть фото на полный экран'
+                      : undefined
+                  }
+                >
+                  {selectedTeacher.photoUrl ? (
+                    <img
+                      src={resolvePhotoUrl(selectedTeacher.photoUrl)}
+                      alt={selectedTeacher.name}
+                      className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/modalphoto:scale-105"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (selectedTeacher.fallbackPhotoUrl && target.src !== selectedTeacher.fallbackPhotoUrl) {
+                          target.src = selectedTeacher.fallbackPhotoUrl;
+                        } else {
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const fallback = parent.querySelector('.modal-photo-fallback');
+                            if (fallback) fallback.classList.remove('hidden');
+                          }
+                        }
+                      }}
+                    />
+                  ) : null}
+
+                  <div
+                    className={`modal-photo-fallback w-full h-full bg-gradient-to-br from-brand-100 to-brand-200 dark:from-brand-950 dark:to-brand-900 flex items-center justify-center text-brand-800 dark:text-brand-300 font-extrabold text-2xl ${
+                      selectedTeacher.photoUrl ? 'hidden' : ''
+                    }`}
+                  >
                     {selectedTeacher.name.split(' ').slice(0, 2).map((n) => n[0]).join('')}
                   </div>
-                )}
+
+                  {/* Hover overlay and zoom badge */}
+                  {(selectedTeacher.photoUrl || selectedTeacher.fallbackPhotoUrl) && (
+                    <>
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/modalphoto:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-2 text-center pointer-events-none">
+                        <Maximize2 className="w-6 h-6 mb-1 drop-shadow" />
+                        <span className="text-[10px] font-bold tracking-tight drop-shadow">Во весь экран</span>
+                      </div>
+                      <div className="absolute bottom-1.5 right-1.5 p-1 rounded-md bg-black/60 text-white shadow-sm pointer-events-none sm:hidden">
+                        <ZoomIn className="w-3.5 h-3.5" />
+                      </div>
+                    </>
+                  )}
+                </div>
+
                 {selectedTeacher.isGroupTeacher && (
                   <span
-                    className="absolute -bottom-2 -right-2 bg-amber-400 text-amber-950 p-1.5 rounded-xl shadow-sm border-2 border-white dark:border-slate-900"
+                    className="absolute -bottom-2 -right-2 bg-amber-400 text-amber-950 p-1.5 rounded-xl shadow-sm border-2 border-white dark:border-slate-900 z-10"
                     title="Преподаватель нашей группы"
                   >
                     <Star className="w-4 h-4 fill-current" />
@@ -543,6 +629,77 @@ export const TeachersPage: React.FC<TeachersPageProps> = ({
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Photo Lightbox Modal */}
+      {fullscreenPhoto && (
+        <div
+          className="fixed inset-0 z-[70] bg-black/95 backdrop-blur-md flex flex-col items-center justify-between p-4 sm:p-6"
+          onClick={() => setFullscreenPhoto(null)}
+        >
+          {/* Top Bar */}
+          <div
+            className="w-full max-w-4xl flex items-center justify-between gap-4 py-2 border-b border-white/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="min-w-0">
+              <h3 className="text-white font-extrabold text-base sm:text-lg truncate">
+                {fullscreenPhoto.name}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 truncate">
+                {fullscreenPhoto.position && `${fullscreenPhoto.position} • `}{fullscreenPhoto.department}
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              <button
+                onClick={() => setFullscreenPhoto(null)}
+                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold flex items-center space-x-2 transition-colors border border-white/10 cursor-pointer"
+                title="Закрыть (Esc)"
+              >
+                <X className="w-4 h-4" />
+                <span>Закрыть (Esc)</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Centered Image */}
+          <div
+            className="relative flex-1 flex items-center justify-center w-full max-w-4xl my-auto p-2"
+            onClick={() => setFullscreenPhoto(null)}
+          >
+            <div
+              className="relative max-w-full max-h-[75vh] sm:max-h-[80vh] flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={fullscreenPhoto.url}
+                alt={fullscreenPhoto.name}
+                className="max-w-[92vw] max-h-[75vh] sm:max-w-2xl sm:max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-white/15 ring-1 ring-white/10 select-none transition-all"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (fullscreenPhoto.fallbackUrl && target.src !== fullscreenPhoto.fallbackUrl) {
+                    target.src = fullscreenPhoto.fallbackUrl;
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Bottom Prompt */}
+          <div
+            className="w-full max-w-4xl pt-2 border-t border-white/10 flex items-center justify-between text-[11px] sm:text-xs text-slate-400"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span>Нажмите в любом месте или клавишу Esc для закрытия</span>
+            <button
+              onClick={() => setFullscreenPhoto(null)}
+              className="text-white hover:underline cursor-pointer"
+            >
+              Вернуться к досье
+            </button>
           </div>
         </div>
       )}
