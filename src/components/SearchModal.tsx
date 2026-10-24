@@ -15,7 +15,7 @@ interface SearchModalProps {
 }
 
 function normalize(text: string): string {
-  return (text || '').toLowerCase().replace(/ё/g, 'е').trim();
+  return (text || '').toLowerCase().replace(/ё/g, 'е').replace(/зз/g, 'з').trim();
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
@@ -105,11 +105,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     // 3. Teachers
     if (filterType === 'all' || filterType === 'teachers') {
       teachersData.forEach((t) => {
+        const role = 'groupRole' in t && t.groupRole ? normalize(String(t.groupRole)) : '';
+        const subjects = 'groupSubjects' in t && Array.isArray(t.groupSubjects) ? t.groupSubjects.map(s => normalize(String(s))) : [];
         if (
           normalize(t.name).includes(q) ||
           normalize(t.department).includes(q) ||
           normalize(t.interests).includes(q) ||
-          normalize(t.position).includes(q)
+          normalize(t.position).includes(q) ||
+          role.includes(q) ||
+          subjects.some(s => s.includes(q))
         ) {
           list.push({
             id: `teach-${t.id}`,

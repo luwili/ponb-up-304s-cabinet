@@ -14,6 +14,7 @@ import {
   Calendar,
   Layers,
   FileCheck2,
+  FileText,
   Clock,
   ArrowRight
 } from 'lucide-react';
@@ -265,6 +266,15 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
                         <span className="text-slate-400 flex-shrink-0">Кафедра:</span>
                         <span className="text-slate-500 dark:text-slate-400">{exam.department}</span>
                       </div>
+                      {'examNote' in exam && exam.examNote && (
+                        <div className="mt-2.5 p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-200 flex items-start space-x-2">
+                          <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold">К сдаче экзамена: </span>
+                            <span>{exam.examNote}</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Hours breakdown */}
@@ -468,6 +478,16 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
             ))}
           </div>
 
+          {selectedSubject === 'ugolov-pravo-osob' && (
+            <div className="max-w-2xl mx-auto p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-200 flex items-start space-x-2.5 shadow-sm">
+              <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold">Экзаменатор: Ситдикова Гузель Зуфаровна. </span>
+                <span>На экзамене преподаватель может проверить наличие рукописного конспекта лекций. Обязательно подготовьте и возьмите с собой конспект!</span>
+              </div>
+            </div>
+          )}
+
           {currentCard ? (
             <div className="max-w-2xl mx-auto space-y-6">
               {/* Card Meta & Navigation */}
@@ -594,6 +614,15 @@ export const ExamPrepPage: React.FC<ExamPrepPageProps> = ({
       {/* TAB 3: LIST OF ALL QUESTIONS */}
       {activeTab === 'list' && (
         <div className="space-y-3">
+          {selectedSubject === 'ugolov-pravo-osob' && (
+            <div className="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-200 flex items-start space-x-2.5 shadow-sm mb-4">
+              <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold">Экзаменатор: Ситдикова Гузель Зуфаровна. </span>
+                <span>На экзамене преподаватель может проверить наличие рукописного конспекта лекций. Обязательно подготовьте и возьмите с собой конспект!</span>
+              </div>
+            </div>
+          )}
           {filteredCards.map((q, idx) => (
             <div
               key={q.id}

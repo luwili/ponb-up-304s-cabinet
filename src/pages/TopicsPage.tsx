@@ -279,6 +279,16 @@ export const TopicsPage: React.FC<TopicsPageProps> = ({
                 {activeTopic.sourceNote}
               </div>
             )}
+
+            {activeSubject?.examNote && (
+              <div className="mt-3.5 p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-200 flex items-start space-x-2">
+                <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold">К сдаче экзамена: </span>
+                  <span>{activeSubject.examNote}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Render content */}

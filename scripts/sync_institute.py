@@ -37,8 +37,19 @@ GROUP_TEACHERS = {
     'Карамов Ильгиз Флоритович': {
         'subjects': ['Финансовое право (Практика)']
     },
+    'Гиззатуллин Равиль Хасанович': {
+        'subjects': ['Экологическое право (экзамен)'],
+        'role': 'Экзаменатор группы (Зав. кафедрой)',
+        'phone': '+7 (347) 252-55-14',
+        'email': 'ecopravo@uust.ru',
+        'room': 'каб. 323 (Достоевского 131)',
+        'isuPersonId': 163209
+    },
     'Малкова Камилла Эдуардовна': {
-        'subjects': ['Экологическое право']
+        'subjects': ['Экологическое право (практика/семинары)'],
+        'role': 'Семинарские и практические занятия',
+        'room': 'каб. 313 / 316 (Достоевского 131)',
+        'isuPersonId': 158588
     },
     'Матвеев Станислав Станиславович': {
         'subjects': ['Общая физическая подготовка']
@@ -46,8 +57,16 @@ GROUP_TEACHERS = {
     'Метелёва Снежана Владимировна': {
         'subjects': ['Гражданское процессуальное право (гражданский процесс)']
     },
+    'Ситдикова Гузель Зуфаровна': {
+        'subjects': ['Уголовное право (особенная часть)'],
+        'role': 'Экзаменатор группы (лекции, проверка конспектов)',
+        'room': 'каб. 302 (лекции) / каб. 107 (кафедра) (Достоевского 131)',
+        'isuPersonId': 158353
+    },
     'Мусабиров Эмиль Ильдарович': {
-        'subjects': ['Уголовное право (особенная часть)']
+        'subjects': ['Уголовное право (особенная часть)'],
+        'role': 'Семинарские и практические занятия',
+        'room': 'каб. 202 / 402 / 106 (Достоевского 131)'
     }
 }
 
@@ -206,7 +225,7 @@ def parse_teachers_from_html(html, dept_name, dept_url):
 
         tid = re.sub(r'[^a-zA-Z0-9а-яА-ЯёЁ]', '-', fio.lower()).strip('-')
 
-        teachers.append({
+        t_obj = {
             'id': tid,
             'name': fio,
             'department': dept_name,
@@ -220,7 +239,17 @@ def parse_teachers_from_html(html, dept_name, dept_url):
             'groupRole': group_meta.get('role', ''),
             'sourceUrl': dept_url,
             'retrievedAt': TODAY_STR
-        })
+        }
+        if 'phone' in group_meta:
+            t_obj['phone'] = group_meta['phone']
+        if 'email' in group_meta:
+            t_obj['email'] = group_meta['email']
+        if 'room' in group_meta:
+            t_obj['room'] = group_meta['room']
+        if 'isuPersonId' in group_meta:
+            t_obj['isuPersonId'] = group_meta['isuPersonId']
+
+        teachers.append(t_obj)
 
     return teachers
 

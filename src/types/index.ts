@@ -12,6 +12,7 @@ export interface Subject {
   color: string;
   topicsCount?: number;
   materialsCount?: number;
+  examNote?: string;
 }
 
 export interface Topic {
@@ -159,6 +160,14 @@ export interface Teacher {
   isGroupTeacher: boolean;
   groupSubjects: string[];
   groupRole?: string;
+  phone?: string;
+  email?: string;
+  room?: string;
+  isuPersonId?: number;
+  photoUrl?: string;
+  fallbackPhotoUrl?: string;
+  bio?: string;
+  scheduleInfo?: string;
   sourceUrl: string;
   retrievedAt: string;
 }

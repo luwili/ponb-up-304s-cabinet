@@ -175,6 +175,13 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
                     <span className="truncate">{sub.departmentName}</span>
                   </div>
                 </div>
+
+                {sub.examNote && (
+                  <div className="mt-3 p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 text-[11px] text-amber-900 dark:text-amber-200 flex items-start space-x-1.5">
+                    <FileText className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                    <span>{sub.examNote}</span>
+                  </div>
+                )}
               </div>
 
               <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-brand-700 dark:text-brand-400">
@@ -292,6 +299,16 @@ export const SubjectsPage: React.FC<SubjectsPageProps> = ({
                       {activeSubject.departmentName}
                     </div>
                   </div>
+
+                  {activeSubject.examNote && (
+                    <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-xs text-amber-900 dark:text-amber-200 flex items-start space-x-2">
+                      <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <span className="font-bold">К сдаче экзамена: </span>
+                        <span>{activeSubject.examNote}</span>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between">
                     <span className="text-slate-400">Форма контроля:</span>

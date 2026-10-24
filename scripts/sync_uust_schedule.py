@@ -447,7 +447,8 @@ def fetch_session_data_isu(opener):
                                 'self': slf,
                                 'total': total_hours
                             },
-                            'teacher': teacher,
+                            'teacher': 'Гиззатуллин Равиль Хасанович (Зав. кафедрой)' if ('эколог' in title.lower() and ctrl_type == 'Экзамен') else ('Ситдикова Гузель Зуфаровна (экзамен, проверка конспектов) / Мусабиров Эмиль Ильдарович (семинары)' if ('уголовное право (особенная часть)' in title.lower() and ctrl_type == 'Экзамен') else teacher),
+                            'examNote': 'Экзамен принимает Ситдикова Г. З. — обязательно иметь с собой конспект (может проверить рукописный конспект лекций)' if ('уголовное право (особенная часть)' in title.lower() and ctrl_type == 'Экзамен') else None,
                             'department': department
                         }
                         if ctrl_type == 'Экзамен':
